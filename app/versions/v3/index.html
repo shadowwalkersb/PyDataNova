@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>PyDataNova v3 – Charts & Grids</title>
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Tabulator -->
+  <link href="https://unpkg.com/tabulator-tables@5.4.4/dist/css/tabulator.min.css" rel="stylesheet">
+  <script src="https://unpkg.com/tabulator-tables@5.4.4/dist/js/tabulator.min.js"></script>
+
+  <!-- Simple-DataTables -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" defer></script>
+</head>
+<body>
+  <h1>PyDataNova v3 – Charts & Grids</h1>
+  <p>Interactive demo with mock data</p>
+
+  <!-- Chart -->
+  <canvas id="myChart" width="600" height="300"></canvas>
+
+  <h2>Vanilla JS Grids Side-by-Side</h2>
+  <div class="grid-container">
+    <div>
+      <h3>Tabulator</h3>
+      <div id="tabulator-table"></div>
+    </div>
+    <div>
+      <h3>Simple-DataTables</h3>
+      <table id="simple-table">
+        <thead>
+          <tr><th>Label</th><th>Value</th></tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+
+  <script src="chart.js"></script>
+  <script>
+    // Mock data
+    const data = [
+      {label:"Red", value:12},
+      {label:"Blue", value:19},
+      {label:"Yellow", value:3},
+      {label:"Green", value:5},
+      {label:"Purple", value:2},
+      {label:"Orange", value:7}
+    ];
+
+    // Tabulator table
+    new Tabulator("#tabulator-table", {
+      data: data,
+      layout: "fitColumns",
+      columns: [
+        {title:"Label", field:"label"},
+        {title:"Value", field:"value"}
+      ],
+    });
+
+    // Populate Simple-DataTables
+    const tbody = document.querySelector("#simple-table tbody");
+    data.forEach(row => {
+      const tr = document.createElement("tr");
+      const tdLabel = document.createElement("td");
+      tdLabel.textContent = row.label;
+      const tdValue = document.createElement("td");
+      tdValue.textContent = row.value;
+      tr.appendChild(tdLabel);
+      tr.appendChild(tdValue);
+      tbody.appendChild(tr);
+    });
+
+    document.addEventListener("DOMContentLoaded", () => {
+      new simpleDatatables.DataTable("#simple-table");
+    });
+  </script>
+</body>
+</html>
