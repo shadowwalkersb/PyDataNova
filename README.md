@@ -34,5 +34,14 @@ This repository will serve as:
 - **Monitoring:** Prometheus, Grafana
 - **CI/CD:** GitHub Actions
 
+## GitHub Pages Deployment
+
+
+The static frontend in the `/app` folder is automatically deployed to GitHub Pages after each push to the `main` branch. You can view the live site here:
+
+[🚀 View the Live App](https://shadowwalkersb.github.io/PyDataNova/)
+
+For more details, see the workflow in `.github/workflows/deploy.yml`.
+
 ## License
 [MIT License](LICENSE) – see LICENSE file for details.
