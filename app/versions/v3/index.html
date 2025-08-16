@@ -2,15 +2,38 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>PyDataNova v3 – Charts</title>
+  <title>PyDataNova v3 – Charts & Table</title>
   <link rel="stylesheet" href="style.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
   <h1>PyDataNova v3 – Charts Demo</h1>
   <p>Interactive demo with mock data</p>
+
   <canvas id="myChart" width="600" height="300"></canvas>
 
+  <h2>Data Table</h2>
+  <table id="dataTable">
+    <thead>
+      <tr><th>Label</th><th>Value</th></tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
   <script src="chart.js"></script>
+  <script>
+    // Populate table dynamically from mockData
+    const tableBody = document.querySelector('#dataTable tbody');
+    mockData.labels.forEach((label, i) => {
+      const row = document.createElement('tr');
+      const labelCell = document.createElement('td');
+      const valueCell = document.createElement('td');
+      labelCell.textContent = label;
+      valueCell.textContent = mockData.datasets[0].data[i];
+      row.appendChild(labelCell);
+      row.appendChild(valueCell);
+      tableBody.appendChild(row);
+    });
+  </script>
 </body>
 </html>
