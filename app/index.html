@@ -1,9 +1,105 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>PyDataNova</title>
+<meta charset="UTF-8">
+<title>PyDataNova Versions</title>
+<style>
+  :root {
+    --primary-color: #4f46e5;
+    --bg-color: #f9fafb;
+    --card-bg: #ffffff;
+    --card-shadow: rgba(0, 0, 0, 0.1);
+    --tab-hover: #6366f1;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--bg-color);
+    color: #111827;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+  }
+
+  h1 {
+    margin-bottom: 20px;
+    text-align: center;
+    color: var(--primary-color);
+  }
+
+  .tabs {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+
+  .tab-btn {
+    padding: 10px 20px;
+    border: 2px solid var(--primary-color);
+    background-color: var(--card-bg);
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 120px;
+    text-align: center;
+    box-shadow: 0 2px 6px var(--card-shadow);
+  }
+
+  .tab-btn:hover {
+    background-color: var(--primary-color);
+    color: #fff;
+    transform: translateY(-2px);
+  }
+
+  .tab-btn.active {
+    background-color: var(--primary-color);
+    color: #fff;
+  }
+
+  iframe {
+    width: 100%;
+    max-width: 1200px;
+    height: 80vh;
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px var(--card-shadow);
+    background-color: #fff;
+    transition: all 0.3s ease;
+  }
+
+  @media (max-width: 768px) {
+    .tabs { flex-direction: column; gap: 10px; }
+    .tab-btn { width: 100%; }
+  }
+</style>
 </head>
 <body>
-  <h1>Hello from PyDataNova</h1>
+
+<h1>PyDataNova Versions</h1>
+
+<div class="tabs">
+  <button class="tab-btn active" onclick="loadVersion('v1')">v1 - Static</button>
+  <button class="tab-btn" onclick="loadVersion('v2')">v2 - CSS/JS</button>
+  <button class="tab-btn" onclick="loadVersion('v3')">v3 - Charts</button>
+  <button class="tab-btn" onclick="loadVersion('v4')">v4 - Backend</button>
+</div>
+
+<iframe id="viewer" src="versions/v1/index.html"></iframe>
+
+<script>
+  function loadVersion(version) {
+    document.getElementById('viewer').src = `versions/${version}/index.html`;
+    const buttons = document.querySelectorAll('.tab-btn');
+    buttons.forEach(btn => btn.classList.remove('active'));
+    event.target.classList.add('active');
+  }
+</script>
+
 </body>
 </html>
