@@ -8,3 +8,13 @@ services:
     volumes:
       - ./api/fastapi_service:/app/fastapi_service
     command: uvicorn fastapi_service.main:app --host 0.0.0.0 --port 8000 --reload
+
+  flask:
+    build:
+      context: ./api
+      dockerfile: flask_service/Dockerfile
+    ports:
+      - "8001:5000"
+    volumes:
+      - ./api/flask_service:/app/flask_service
+    command: gunicorn flask_service.app:app -b 0.0.0.0:5000 -w 2 --reload
