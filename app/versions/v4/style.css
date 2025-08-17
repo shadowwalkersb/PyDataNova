@@ -3,17 +3,20 @@ viewer, html, body, container {
 }
 
 body {
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #f4f4f9;
-  color: #333;
+  font-family: Arial, sans-serif;
   text-align: center;
-  margin: 0;
-  /* padding: 20px; */
+  margin: 20px;
 }
 
-h1 {
-  /* margin-bottom: 30px; */
-  color: #1e3a8a;
+#buttons {
+  margin-bottom: 20px;
+}
+
+button {
+  margin: 0 10px;
+  padding: 10px 20px;
+  font-size: 1rem;
+  cursor: pointer;
 }
 
 #inspector {
@@ -49,31 +52,16 @@ h1 {
 } */
 
 table {
+  margin: 0 auto;
   border-collapse: collapse;
-  width: 70%;
-  margin: 0 auto 40px auto;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-  background-color: #fff;
-  border-radius: 8px;
-  overflow: hidden;
+  width: 60%;
 }
 
 th, td {
-  padding: 12px 15px;
-  border-bottom: 1px solid #ddd;
+  border: 1px solid #333;
+  padding: 8px 12px;
 }
 
 th {
-  background-color: #4f46e5;
-  color: #fff;
-  text-transform: uppercase;
-  font-size: 14px;
-}
-
-td {
-  font-size: 14px;
-}
-
-tr:hover {
-  background-color: #f1f5f9;
+  background-color: #f4f4f4;
 }
