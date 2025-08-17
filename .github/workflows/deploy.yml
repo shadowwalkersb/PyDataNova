@@ -15,6 +15,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Generate config.js from template
+        working-directory: ./app/versions/v4/js
+        env:
+          FASTAPI_URL: ${{ secrets.FASTAPI_URL }}
+          FLASK_URL: ${{ secrets.FLASK_URL }}
+        run: |
+          envsubst < config.template.js > config.js
+
       - name: Upload Pages Artifact
         uses: actions/upload-pages-artifact@v3
         with:
