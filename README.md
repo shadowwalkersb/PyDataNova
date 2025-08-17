@@ -7,6 +7,19 @@ This repository will serve as:
 - A **progressive showcase** of alternative tech stacks (Python HTTP server → Nginx → FastAPI, etc.)
 - A **potential cookiecutter template** for bootstrapping production-ready projects.
 
+## Project Structure
+
+```
+PyDataNova/
+├── app/                # Frontend
+│   ├── versions/
+│   │   ├── v1/         # Basic static HTML
+│   │   ├── v2/         # Added CSS/JS interactivity
+│   │   └── v3/         # Table display with mock data
+│   └── index.html      # Main landing page
+└── README.md
+```
+
 ## Vision & Roadmap
 
 ### Phase 1 – Minimal Hello World
@@ -38,8 +51,6 @@ This repository will serve as:
 The static frontend in the `/app` folder is automatically deployed to GitHub Pages after each push to the `main` branch. You can view the live site here:
 
 [🚀 View the Live App](https://shadowwalkersb.github.io/PyDataNova/)
-
-For more details, see the workflow in `.github/workflows/deploy.yml`.
 
 ## License
 [MIT License](LICENSE) – see LICENSE file for details.
