@@ -2,21 +2,20 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>PyDataNova Versions</title>
+  <title>PyDataNova Portfolio</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-<h1>PyDataNova Versions</h1>
+<h1>PyDataNova Portfolio</h1>
 
 <div class="tabs">
-  <button class="tab-btn active" onclick="loadVersion('v1')">v1 – Static</button>
+  <button class="tab-btn" onclick="loadVersion('v1')">v1 – Static</button>
   <button class="tab-btn" onclick="loadVersion('v2')">v2 – CSS/JS</button>
   <button class="tab-btn" onclick="loadVersion('v3')">v3 – Charts</button>
-  <button class="tab-btn" onclick="loadVersion('v4')">v4 – Backend (coming soon)</button>
+  <button class="tab-btn active" onclick="loadVersion('v4')">v4 – Backend</button>
 </div>
 
-<iframe id="viewer" src="versions/v1/index.html"></iframe>
+<iframe id="viewer" src="versions/v4/index.html"></iframe>
 
 <script>
   function loadVersion(version) {
