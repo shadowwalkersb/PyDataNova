@@ -18,23 +18,26 @@ window.fetch = async function (...args) {
 
   try {
     const response = await originalFetch(...args);
+
+    // Clone response to read JSON without consuming original
     const cloned = response.clone();
-    logInspector("Fetch Response", {
-        url: response.url,
-        status: response.status,
-        statusText: response.statusText,
-        headers: [...response.headers],
-        body: await cloned.text()
+    let data;
+    try {
+      data = await cloned.json();
+    } catch {
+      data = await cloned.text();
+    }
+
+    logInspector("Intercepted Response", {
+      status: response.status,
+      statusText: response.statusText,
+      body: data,
     });
-    return response;
-  } catch (error) {
-    const err = {
-      message: error.message,
-      stack: error.stack,
-      ...error
-    };
-    logInspector("Fetch Error", err);
-    return err;
+
+    return response; // return original response to continue normal flow
+  } catch (err) {
+    logInspector("Fetch Error", { error: err.toString() });
+    throw err;
   }
 };
 
