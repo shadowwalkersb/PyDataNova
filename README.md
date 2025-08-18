@@ -19,10 +19,12 @@ PyDataNova/
 │   │   ├── v1/         # Basic static HTML
 │   │   ├── v2/         # Added CSS/JS interactivity
 │   │   ├── v3/         # Table display with mock data
-│   │   └── v4/         # API-connected table, styled frontend
-│   └── index.html      # Main landing page
+│   │   └── v4/         # API-connected table, buttons, styled frontend
+│   │       ├── index.html
+│   │       ├── style.css
+│   │       └── api-fetch.js
 ├── api/                # FastAPI backend
-│   ├── main.py         # API endpoints
+│   ├── main.py         # API endpoints with CORS
 │   └── requirements.txt
 └── README.md
 ```
@@ -32,8 +34,11 @@ PyDataNova/
 ## Frontend (v4)
 
 - Modular HTML, CSS, and separate JS (`api-fetch.js`)
-- Fetches data from local FastAPI backend (`http://127.0.0.1:8000/mock-data`)
+- Two buttons:
+  - **Fetch Root Message** → fetches `/` endpoint
+  - **Fetch Mock Data** → fetches `/mock-data` endpoint and renders table
 - Displays data in a **centered, styled table**
+- Buttons allow interactive testing of multiple endpoints
 
 ### Run locally
 
@@ -41,36 +46,30 @@ PyDataNova/
 
 ```bash
 cd api
-pip install -r requirements.txt
+pip install fastapi uvicorn
 uvicorn main:app --reload
 ```
 
 2. Serve the frontend (optional, any static server) or open directly in browser:
 
 ```bash
-cd app/versions/v4
+cd ../app/versions/v4
 python -m http.server 5500
 ```
 
-3. Update `api-fetch.js` fetch URL if needed:
+3. Open in browser: [http://127.0.0.1:5500/index.html](http://127.0.0.1:5500/index.html)
 
-```js
-fetch('http://127.0.0.1:8000/mock-data')
-  .then(res => res.json())
-  .then(data => {
-      // render table
-  });
-```
+- Click **Fetch Root Message** to see `/` JSON output.
+- Click **Fetch Mock Data** to see table populated from backend.
 
-4. Open in browser: [http://127.0.0.1:5500/index.html](http://127.0.0.1:5500/index.html)
-
-Now the table should populate with mock data from the running FastAPI backend.
+> **Note:** Backend CORS is enabled to allow local frontend fetches.
 
 ---
 
 ## Backend (FastAPI)
 
 - Endpoints:
+
   - `/` → hello message
   - `/mock-data` → mock table data
 
@@ -87,13 +86,11 @@ Now the table should populate with mock data from the running FastAPI backend.
 }
 ```
 
-- Optionally, you can serve the frontend through FastAPI to simplify fetch URLs:
+- CORS middleware is enabled for local frontend testing:
 
 ```python
-from fastapi.staticfiles import StaticFiles
-app.mount("/", StaticFiles(directory="../app/versions/v4", html=True), name="frontend")
+from fastapi.middleware.cors import CORSMiddleware
 ```
-Then browse `http://127.0.0.1:8000/` and the fetch works as `/mock-data`.
 
 ---
 
@@ -107,7 +104,7 @@ Then browse `http://127.0.0.1:8000/` and the fetch works as `/mock-data`.
 
 ### Phase 2 – Incremental Improvements
 - Multiple backend endpoints with mock / real data
-- API-connected frontend table
+- API-connected frontend table with buttons
 - Versioned frontend iterations (v1 → v4)
 - Optional monitoring (Prometheus + Grafana)
 - Cloud deployment via Terraform
