@@ -14,5 +14,32 @@ window.fetch = async function (...args) {
     body: (config && config.body) || null,
   };
 
-  inspector.textContent = JSON.stringify(requestInfo, null, 2);
+  logInspector("Fetch Request", requestInfo);
+
+  try {
+    const response = await originalFetch(...args);
+    const cloned = response.clone();
+    logInspector("Fetch Response", {
+        url: response.url,
+        status: response.status,
+        statusText: response.statusText,
+        headers: [...response.headers],
+        body: await cloned.text()
+    });
+    return response;
+  } catch (error) {
+    const err = {
+      message: error.message,
+      stack: error.stack,
+      ...error
+    };
+    logInspector("Fetch Error", err);
+    return err;
+  }
 };
+
+function logInspector(title, obj) {
+  inspector.textContent += `\n=== ${title} ===\n`;
+  inspector.textContent += JSON.stringify(obj, null, 2) + "\n";
+  inspector.scrollTop = inspector.scrollHeight; // Auto-scroll to bottom
+}
