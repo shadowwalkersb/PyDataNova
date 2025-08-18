@@ -24,7 +24,7 @@ PyDataNova/
 │   │       ├── style.css
 │   │       └── api-fetch.js
 ├── api/                # FastAPI backend
-│   ├── main.py         # API endpoints with CORS
+│   ├── main.py         # API endpoints
 │   └── requirements.txt
 └── README.md
 ```
@@ -35,10 +35,10 @@ PyDataNova/
 
 - Modular HTML, CSS, and separate JS (`api-fetch.js`)
 - Two buttons:
-  - **Fetch Root Message** → fetches `/` endpoint
+  - **Fetch Root Message** → fetches `/` endpoint on the API
   - **Fetch Mock Data** → fetches `/mock-data` endpoint and renders table
 - Displays data in a **centered, styled table**
-- Buttons allow interactive testing of multiple endpoints
+- Buttons allow interactive testing of backend endpoints
 
 ### Run locally
 
@@ -50,19 +50,14 @@ pip install fastapi uvicorn
 uvicorn main:app --reload
 ```
 
-2. Serve the frontend (optional, any static server) or open directly in browser:
+2. Open frontend v4 locally:
 
-```bash
-cd ../app/versions/v4
-python -m http.server 5500
-```
-
-3. Open in browser: [http://127.0.0.1:5500/index.html](http://127.0.0.1:5500/index.html)
-
-- Click **Fetch Root Message** to see `/` JSON output.
-- Click **Fetch Mock Data** to see table populated from backend.
+- Open `app/versions/v4/index.html` in your browser directly
+- Click **Fetch Root Message** or **Fetch Mock Data** to interact with backend
 
 > **Note:** Backend CORS is enabled to allow local frontend fetches.
+
+- Once deployed, update fetch URLs to point to the Render API URL.
 
 ---
 
@@ -98,7 +93,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 ### Phase 1 – Minimal Hello World
 - Static frontend (HTML/CSS/JS)
-- Basic backend service (Python HTTP server → FastAPI)
+- FastAPI backend service
 - GitHub Actions CI/CD
 - Local development first; containerized deployment (Docker) later
 
@@ -132,7 +127,7 @@ The static frontend in the `/app` folder is automatically deployed to GitHub Pag
 
 [🚀 View the Live App](https://shadowwalkersb.github.io/PyDataNova/)
 
-> **Note:** The v4 frontend fetches data from the local FastAPI backend. Deployment to a live API backend will require updating the fetch URLs accordingly.
+> **Note:** The v4 frontend fetches data from the local FastAPI backend. Update the fetch URLs to point to your Render API deployment when live.
 
 ---
 
