@@ -99,14 +99,3 @@ mockBtn.addEventListener('click', async () => {
         renderMessage("Error fetching mock data");
     }
 });
-
-const statusEl = document.getElementById('api-status');
-
-fetch(`${API_BASE}/status`)
-  .then(res => res.json())
-  .then(data => {
-    statusEl.textContent = data.status === 'ok' ? 'API Online ✅' : 'API Offline ❌';
-  })
-  .catch(() => {
-    statusEl.textContent = 'API Offline ❌';
-  });
