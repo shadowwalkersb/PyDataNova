@@ -1,7 +1,7 @@
 // const fastapiUrl = "https://your-fastapi-render.app";
 // const flaskUrl = "https://your-flask-render.app";
 const fastapiUrl = "http://localhost:8000";
-const flaskUrl = "http://localhost:5000";
+const flaskUrl = "http://localhost:5001";
 
 // FastAPI buttons
 document.getElementById("btn-fastapi-root").onclick = () => {
