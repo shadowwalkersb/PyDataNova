@@ -1,0 +1,13 @@
+version: "3.9"
+
+services:
+  api:
+    build: ./api          # path where your Dockerfile is
+    container_name: pydatanova-api
+    ports:
+      - "8000:8000"       # host:container
+    volumes:
+      - ./api:/app        # live reload in dev (optional)
+    environment:
+      - ENV=development
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
