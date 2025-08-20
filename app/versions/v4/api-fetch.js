@@ -4,8 +4,8 @@ const responseDiv = document.getElementById("response");
 // const tableContainer = document.getElementById("table-container");
 
 // API URL lives only in JS
-const API_BASE_URL = "https://pydatanova-api.onrender.com";
-// const API_BASE_URL = "http://127.0.0.1:8000";
+// const API_BASE_URL = "https://pydatanova-api.onrender.com";
+const API_BASE_URL = "http://127.0.0.1:8000";
 
 // Event listeners
 fetchRootBtn.addEventListener("click", async () => {

@@ -13,7 +13,7 @@ services:
     build: ./api/flask
     container_name: flask
     ports:
-      - "5000:5000"
+      - "5001:5000"
     volumes:
       - ./api/flask:/app     # mount local code
     command: python app.py
