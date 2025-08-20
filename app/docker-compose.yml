@@ -1,13 +1,10 @@
-version: "3.9"
-
 services:
-  api:
-    build: ./api          # path where your Dockerfile is
-    container_name: pydatanova-api
+  fastapi:
+    build: ./api/fastapi
+    container_name: fastapi
     ports:
-      - "8000:8000"       # host:container
+      - "8000:8000"
     volumes:
-      - ./api:/app        # live reload in dev (optional)
-    environment:
-      - ENV=development
+      - ./api/fastapi:/app   # mount local code
     command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+    restart: unless-stopped
