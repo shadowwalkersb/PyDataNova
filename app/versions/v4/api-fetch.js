@@ -76,3 +76,37 @@ function renderMockData(data) {
 
     responseDiv.appendChild(table);
 }
+
+// Event listeners
+fetchRootBtn.addEventListener("click", async () => {
+    try {
+        const response = await fetch(`${API_BASE_URL}/`);
+        const data = await response.json();
+        renderMessage(data.message);
+    } catch (err) {
+        console.error(err);
+        renderMessage("Error fetching root message");
+    }
+});
+
+mockBtn.addEventListener('click', async () => {
+    try {
+        const response = await fetch(`${API_BASE_URL}/mock-data`);
+        const data = await response.json();
+        renderMockData(data);
+    } catch (err) {
+        console.error(err);
+        renderMessage("Error fetching mock data");
+    }
+});
+
+const statusEl = document.getElementById('api-status');
+
+fetch(`${API_BASE}/status`)
+  .then(res => res.json())
+  .then(data => {
+    statusEl.textContent = data.status === 'ok' ? 'API Online ✅' : 'API Offline ❌';
+  })
+  .catch(() => {
+    statusEl.textContent = 'API Offline ❌';
+  });

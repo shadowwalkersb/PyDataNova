@@ -5,23 +5,15 @@
   <title>PyDataNova v4</title>
   <link rel="stylesheet" href="style.css">
 </head>
-<body style="display: flex; flex-direction: row; gap: 20px;">
-  <pre id="inspector"></pre>
-
-  <div id="main-container" style="display: flex; gap: 20px;">
+<body>
     <h1>PyDataNova v4 - API Showcase</h1>
-
-    <div id="content" style="display:flex;height: 90%;">
-      <div id="buttons" style="display: flex; flex-direction:column; gap: 10px; height: 100%;">
-        <button id="btn-root">Fetch Root Message</button>
-        <button id="btn-mock">Fetch Mock Data</button>
-      </div>
-      <div id="response" style="flex: auto;">
-        <p>Response will appear here...</p>
-      </div>
-      <!-- <div id="table-container"></div> -->
+    <span id="api-status"></span>
+    <div class="buttons">
+        <button id="fetch-root-btn">Fetch Root Message</button>
+        <button id="fetch-mock-btn">Fetch Mock Data</button>
     </div>
-  </div>
+
+  <div id="table-container"></div>
 
   <script src="api-fetch.js"></script>
   <script src="api-inspector.js"></script>

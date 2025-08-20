@@ -1,6 +1,10 @@
 import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+import logging
+from fastapi import Request
+
+logging.basicConfig(level=logging.INFO)
 
 app = FastAPI()
 
@@ -12,6 +16,12 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+@app.middleware("http")
+async def log_requests(request: Request, call_next):
+    logging.info(f"{request.method} {request.url}")
+    response = await call_next(request)
+    return response
 
 @app.get("/")
 def root():
@@ -27,6 +37,10 @@ def mock_data():
             [3, 33, "C"]
         ]
     }
+
+@app.get("/status")
+async def status():
+    return {"status": "ok"}
 
 # Optional: Use PORT from Render
 port = int(os.environ.get("PORT", 10000))
