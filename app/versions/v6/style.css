@@ -7,6 +7,10 @@ body {
     padding: 0;
 }
 
+#fastapi-users {
+    margin-left: 10px;
+}
+
 .pane {
     flex: 1;
     padding: 10px;
