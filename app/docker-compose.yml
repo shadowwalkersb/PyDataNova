@@ -5,7 +5,7 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - ./api/fastapi:/app   # mount local code
+      - ./api/fastapi:/app/api/fastapi   # mount local code
     command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
     restart: unless-stopped
 
@@ -13,10 +13,10 @@ services:
     build: ./api/flask
     container_name: flask
     ports:
-      - "5001:5000"
+      - "8001:5000"
     volumes:
-      - ./api/flask:/app     # mount local code
-    command: python app.py
+      - ./api/flask:/app/api/flask   # mount local code
+    command: gunicorn app:app -b 0.0.0.0:5000 -w 2 --reload
     environment:
-      - FLASK_ENV=development
+      - FLASK_APP=app.py
     restart: unless-stopped
