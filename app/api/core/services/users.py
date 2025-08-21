@@ -2,7 +2,9 @@ from core.db import mongo, supabase, neon
 
 def get_users(db_name):
     db_map = {
+        "mongo": mongo.db,
         "neon": neon.db,
+        "supabase": supabase.db,
     }
     db = db_map.get(db_name)
     # query logic depending on DB

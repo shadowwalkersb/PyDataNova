@@ -1,6 +1,8 @@
 fastapi
 fastapi-cors
 uvicorn[standard]
+pymongo[srv]
+supabase
 psycopg2-binary
 sqlalchemy
 python-dotenv

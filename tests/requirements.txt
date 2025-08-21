@@ -1,8 +1,6 @@
-flask
-flask-cors
-gunicorn
+pytest
+python-dotenv
 pymongo[srv]
 supabase
 psycopg2-binary
 sqlalchemy
-python-dotenv
