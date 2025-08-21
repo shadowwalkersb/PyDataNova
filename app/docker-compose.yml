@@ -17,6 +17,4 @@ services:
     volumes:
       - ./api/flask:/app/api/flask   # mount local code
     command: gunicorn app:app -b 0.0.0.0:5000 -w 2 --reload
-    environment:
-      - FLASK_APP=app.py
     restart: unless-stopped
