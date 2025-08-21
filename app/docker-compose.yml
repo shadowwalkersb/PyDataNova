@@ -22,3 +22,19 @@ services:
       - ./api/flask:/app/api/flask   # mount local code
     command: gunicorn app:app -b 0.0.0.0:5000 -w 2 --reload
     restart: unless-stopped
+
+  mongo:
+    image: mongo:6
+    container_name: mongo_db
+    ports:
+      - "8002:27017"
+
+  elephant:
+    image: postgres:16
+    container_name: elephant_db
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: elephant
+    ports:
+      - "8004:5432"
