@@ -13,3 +13,18 @@ fetch("http://localhost:8000/items/")
     renderData('fastapi-items', data);
   })
   .catch(error => console.error("Error fetching data:", error));
+
+
+fetch("http://localhost:8001/users/")
+  .then(response => response.json())
+  .then(data => {
+    renderData('flask-users', data);
+  })
+  .catch(error => console.error("Error fetching data:", error));
+
+fetch("http://localhost:8001/items/")
+  .then(response => response.json())
+  .then(data => {
+    renderData('flask-items', data);
+  })
+  .catch(error => console.error("Error fetching data:", error));
