@@ -1,13 +1,41 @@
-from flask import Blueprint
+from flask import Blueprint, request, jsonify
+from api.core.services import items as items_service
+from api.core.utils.logger import get_logger
+from api.core.utils.validation import validate_payload
 
+logger = get_logger()
 bp = Blueprint("items", __name__)
 
 @bp.route("/", methods=["GET"])
 def get_items():
-    return [
-        {"id": 1, "name": "Laptop", "category": "Electronics", "price": 999.99, "owner_id": 1},
-        {"id": 2, "name": "Desk Chair", "category": "Furniture", "price": 199.99, "owner_id": 2},
-        {"id": 3, "name": "Water Bottle", "category": "Accessories", "price": 14.99, "owner_id": 1},
-        {"id": 4, "name": "Notebook", "category": "Stationery", "price": 3.49, "owner_id": 3},
-        {"id": 5, "name": "Headphones", "category": "Electronics", "price": 79.99, "owner_id": 2}
-    ]
+    db = request.args.get("db")
+    return jsonify(items_service.get_all_items(db))
+
+@bp.route("/<int:item_id>", methods=["GET"])
+def get_item(item_id):
+    db = request.args.get("db")
+    item = items_service.get_item_by_id(db, item_id)
+    if not item:
+        return jsonify({"error": "Item not found"}), 404
+    return jsonify(item)
+
+@bp.route("/", methods=["POST"])
+def create_item():
+    db = request.args.get("db")
+    payload = request.json
+    try:
+        validate_payload(["name", "owner_id"], payload)
+        return jsonify(items_service.create_item(db, payload))
+    except ValueError as e:
+        return jsonify({"error": str(e)}), 400
+
+@bp.route("/<int:item_id>", methods=["PUT"])
+def update_item(item_id):
+    db = request.args.get("db")
+    payload = request.json
+    return jsonify(items_service.update_item(db, item_id, payload))
+
+@bp.route("/<int:item_id>", methods=["DELETE"])
+def delete_item(item_id):
+    db = request.args.get("db")
+    return jsonify(items_service.delete_item(db, item_id))
