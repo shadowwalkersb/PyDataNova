@@ -1,8 +1,8 @@
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from routers.users import router as users_router
-from routers.items import router as items_router
+from fastapi_service.routers.users import router as users_router
+from fastapi_service.routers.items import router as items_router
 
 origins = [
     "http://localhost:5500",

@@ -1,7 +1,7 @@
 from flask import Flask
 from flask_cors import CORS
-from routes.users import bp as users_bp
-from routes.items import bp as items_bp
+from flask_service.routes.users import bp as users_bp
+from flask_service.routes.items import bp as items_bp
 
 app = Flask(__name__)
 
