@@ -1,6 +1,6 @@
 # tests/db/test_connections.py
 import os
-from sqlalchemy import create_engine, text
+from sqlalchemy import create_engine, text, inspect
 from pymongo import MongoClient
 from supabase import create_client
 from dotenv import load_dotenv
@@ -25,10 +25,12 @@ SUPABASE_KEY = os.getenv("SUPABASE_KEY")
 def test_neon_connection():
     engine = create_engine(NEON_URL, echo=False)
     with engine.connect() as conn:
+        # inspector = inspect(conn)
+        # print(inspector.get_table_names())
         # print(engine.table_names)
-        print(conn.tables)
-        # result = conn.execute(text("SELECT 1"))
-        # assert result.scalar() == 1
+        # print(conn.tables)
+        result = conn.execute(text("SELECT 1"))
+        assert result.scalar() == 1
 
 # # --------------------
 # # MongoDB Test
