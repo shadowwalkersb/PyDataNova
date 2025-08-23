@@ -11,16 +11,25 @@
 <div class="pane" id="fastapi-pane">
   <h2>FastAPI (8000)</h2>
   <div id="fastapi-users"></div>
-  <form id="fastapi-user-form">...</form>
+  <form id="fastapi-user-form">
+    <input type="text" name="first" placeholder="First Name" required>
+    <input type="text" name="last" placeholder="Last Name" required>
+    <button type="submit">Add FastAPI User</button>
+  </form>
 </div>
 
 <div class="pane" id="flask-pane">
   <h2>Flask (8001)</h2>
   <div id="flask-users"></div>
-  <form id="flask-user-form">...</form>
+  <form id="flask-user-form">
+    <input type="text" name="first" placeholder="First Name" required>
+    <input type="text" name="last" placeholder="Last Name" required>
+    <button type="submit">Add Flask User</button>
+  </form>
 </div>
 
 <script type="module" src="js/fetch.js"></script>
+<script type="module" src="js/post.js"></script>
 
 </body>
 </html>

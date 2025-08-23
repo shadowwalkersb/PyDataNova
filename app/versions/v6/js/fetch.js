@@ -28,7 +28,7 @@ fetch("http://localhost:8001/users/")
   })
 .catch(error => {
   console.error(error);
-  document.getElementById('fastapi-users').textContent = "Failed to load users";
+  document.getElementById('flask-users').textContent = "Failed to load users";
 });
 
 // fetch("http://localhost:8001/items/")
@@ -38,5 +38,5 @@ fetch("http://localhost:8001/users/")
 //   })
 // .catch(error => {
 //   console.error(error);
-//   document.getElementById('fastapi-users').textContent = "Failed to load users";
+//   document.getElementById('flask-users').textContent = "Failed to load users";
 // });
