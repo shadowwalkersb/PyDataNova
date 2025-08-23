@@ -1,3 +1,5 @@
+import { FASTAPI_URL, FLASK_URL } from "./config.js";
+
 document.getElementById("fastapi-user-form").addEventListener("submit", async e => {
   e.preventDefault();
   const form = e.target;
@@ -6,7 +8,7 @@ document.getElementById("fastapi-user-form").addEventListener("submit", async e 
     last: form.last.value
   };
 
-  await fetch("http://localhost:8000/users/", {
+  await fetch(FASTAPI_URL + "/users/", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data)
@@ -24,7 +26,7 @@ document.getElementById("flask-user-form").addEventListener("submit", async e =>
     last: form.last.value
   };
 
-  await fetch("http://localhost:8001/users/", {
+  await fetch(FLASK_URL + "/users/", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data)
