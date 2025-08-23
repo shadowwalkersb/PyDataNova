@@ -1,4 +1,5 @@
-const API_BASE = window.FASTAPI_URL || "http://localhost:8000";
+import { FASTAPI_URL } from "../../../js/config.js";
+import { fetchAndDisplay } from "./helpers.js";
 
 const runBtn = document.getElementById("runPipelineBtn");
 const statusEl = document.getElementById("status");
