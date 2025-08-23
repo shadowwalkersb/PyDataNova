@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi_service.routers.users import router as users_router
 from fastapi_service.routers.items import router as items_router
+from fastapi_service.routers.pipeline import router as pipeline_router
 
 app = FastAPI(title="PyDataNova FastAPI v6")
 
@@ -22,6 +23,7 @@ app.add_middleware(
 
 app.include_router(users_router, prefix="/users", tags=["users"])
 app.include_router(items_router, prefix="/items", tags=["items"])
+app.include_router(pipeline_router, prefix="/pipeline", tags=["pipeline"])
 
 @app.get("/")
 async def root():
