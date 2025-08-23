@@ -4,6 +4,7 @@ from fastapi_service.routers.users_mock import router as users_mock_router
 from fastapi_service.routers.items_mock import router as items_mock_router
 from fastapi_service.routers.users import router as users_router
 from fastapi_service.routers.items import router as items_router
+from fastapi_service.routers.pipeline import router as pipeline_router
 
 app = FastAPI(title="PyDataNova FastAPI")
 
@@ -25,6 +26,7 @@ app.include_router(users_mock_router, prefix="/users-mock", tags=["users-mock"])
 app.include_router(items_mock_router, prefix="/items-mock", tags=["items-mock"])
 app.include_router(users_router, prefix="/users", tags=["users"])
 app.include_router(items_router, prefix="/items", tags=["items"])
+app.include_router(pipeline_router, prefix="/pipeline", tags=["pipeline"])
 
 @app.get("/")
 async def root():
