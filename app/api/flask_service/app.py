@@ -5,10 +5,12 @@ from flask_service.routes.items import bp as items_bp
 
 app = Flask(__name__)
 
-CORS(app, origins=["https://shadowwalkersb.github.io/PyDataNova/",
-                   "http://localhost:5500",
-                   "http://127.0.0.1:5500",
-                   ])  # allow your frontend
+# Origins allowed: local dev + GH Pages
+CORS(app, origins=[
+    "https://shadowwalkersb.github.io",
+    "http://localhost:5500",
+    "http://127.0.0.1:5500",
+], supports_credentials=True)
 
 app.register_blueprint(users_bp, url_prefix="/users")
 app.register_blueprint(items_bp, url_prefix="/items")
