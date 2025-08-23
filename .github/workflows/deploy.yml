@@ -15,6 +15,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Replace env variables in config
+        run: |
+          envsubst < ./app/versions/v6/js/config.template.js > ./app/versions/v6/js/config.js
+
       - name: Upload Pages Artifact
         uses: actions/upload-pages-artifact@v3
         with:
