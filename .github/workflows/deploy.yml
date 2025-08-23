@@ -15,9 +15,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Replace env variables in config
+      - name: Generate config.js from template
+        working-directory: ./app/versions/v6/js
+        env:
+          FASTAPI_URL: ${{ secrets.FASTAPI_URL }}
+          FLASK_URL: ${{ secrets.FLASK_URL }}
         run: |
-          envsubst < ./app/versions/v6/js/config.template.js > ./app/versions/v6/js/config.js
+          envsubst < config.template.js > config.js
 
       - name: Upload Pages Artifact
         uses: actions/upload-pages-artifact@v3
