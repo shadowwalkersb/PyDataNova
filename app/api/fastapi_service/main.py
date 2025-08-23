@@ -5,6 +5,7 @@ from fastapi_service.routers.users import router as users_router
 from fastapi_service.routers.items import router as items_router
 
 origins = [
+    "https://shadowwalkersb.github.io/PyDataNova/",
     "http://localhost:5500",
     "http://127.0.0.1:5500",
 ]
