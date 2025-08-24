@@ -20,6 +20,15 @@ async def run_pipeline():
     result = etl_flow()
     return JSONResponse(content={"message": f"Pipeline finished. Rows inserted: {result['rows_inserted']}"})
 
+@router.post("/run")
+async def pipeline_run():
+    """Trigger the ETL pipeline and return results"""
+    results = run_pipeline()
+    return JSONResponse(
+        content={"message": "Pipeline finished", "results": results},
+        status_code=200
+    )
+
 @router.get("/polars")
 async def run_polars_pipeline():
     # placeholder result, will hook Prefect later
