@@ -10,3 +10,4 @@ pydantic
 polars
 pyarrow
 httpx
+prefect

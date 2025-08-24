@@ -22,7 +22,6 @@ async def run_pipeline():
 
 @router.post("/run")
 async def pipeline_run():
-    """Trigger the ETL pipeline and return results"""
     results = run_pipeline()
     return JSONResponse(
         content={"message": "Pipeline finished", "results": results},

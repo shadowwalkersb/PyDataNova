@@ -1,46 +1,70 @@
 import httpx
 import pandas as pd
 from io import StringIO
+from prefect import flow, task, get_run_logger
 
 # Sources
 CSV_URL = "https://raw.githubusercontent.com/corgis-edu/corgis/master/website/datasets/csv/weather/weather.csv"
 API_URL = "https://jsonplaceholder.typicode.com/posts"
 
-def extract_csv(url: str) -> pd.DataFrame:
-    """Download CSV from URL and return as DataFrame"""
-    resp = httpx.get(url)
+# -------------------
+# Extraction Tasks
+# -------------------
+@task
+def extract_csv():
+    logger = get_run_logger()
+    logger.info("Starting CSV extraction")
+    resp = httpx.get(CSV_URL)
     resp.raise_for_status()
-    return pd.read_csv(StringIO(resp.text))
+    df = pd.read_csv(StringIO(resp.text))
+    logger.info("CSV extraction finished")
+    return df
 
-def extract_api(url):
-    """Compute average temperature per state (top 5 states for demo)"""
-    resp = httpx.get(url)
+@task
+def extract_api():
+    logger = get_run_logger()
+    logger.info("Starting API extraction")
+    resp = httpx.get(API_URL)
     resp.raise_for_status()
-    return resp.json()
+    data = resp.json()
+    logger.info("API extraction finished")
+    return data
 
-def transform_weather(df: pd.DataFrame) -> dict:
-    return df.groupby("Station.State")["Data.Temperature.Avg Temp"].mean().head(5).to_dict()
+# -------------------
+# Transform Tasks
+# -------------------
+@task
+def transform_weather(df):
+    logger = get_run_logger()
+    logger.info("Transforming CSV data")
+    result = df.groupby("Station.State")["Data.Temperature.Avg Temp"].mean().head(5).to_dict()
+    logger.info("CSV transform finished")
+    return result
 
+@task
 def transform_api(data):
-    """Transform API data to keep only the first 5 posts with selected fields."""
-    transformed = []
-    for post in data[:5]:
-        transformed.append({
-            "id": post["id"],
-            "userId": post["userId"],
-            "title": post["title"]
-        })
-    return transformed
+    logger = get_run_logger()
+    logger.info("Transforming API data")
+    result = [{"id": p["id"], "userId": p["userId"], "title": p["title"]} for p in data[:5]]
+    logger.info("API transform finished")
+    return result
 
-def run_pipeline() -> dict:
+# -------------------
+# Pipeline Flow
+# -------------------
+@flow
+def run_pipeline():
+    """Run all ETL tasks in parallel and return results with progress"""
     results = {}
 
-    # CSV
-    csv_df = extract_csv(CSV_URL)
-    results["csv"] = transform_weather(csv_df)
+    # Run extraction in parallel
+    csv_df_future = extract_csv.submit()
+    api_data_future = extract_api.submit()
 
-    # API
-    api_data = extract_api(API_URL)
-    results["api"] = transform_api(api_data)
+    # Transform after extraction
+    results["csv"] = transform_weather.submit(csv_df_future)
+    results["api"] = transform_api.submit(api_data_future)
 
-    return results
+    # Wait for all tasks to complete and gather results
+    final_results = {k: v.result() for k, v in results.items()}
+    return final_results
