@@ -4,43 +4,47 @@ const runBtn = document.getElementById("runPipelineBtn");
 const statusEl = document.getElementById("status");
 const dataPre = document.getElementById("dataPre");
 
-// Task names for progress
 const tasks = ["csv", "api"];
+let runId = null;
 
 runBtn.addEventListener("click", async () => {
     // Reset UI
     statusEl.textContent = "Pipeline started...";
     dataPre.textContent = "";
-    tasks.forEach(task => {
-        const taskEl = document.getElementById(`${task}Status`);
-        if (taskEl) taskEl.textContent = "Pending...";
+    tasks.forEach(t => {
+        const el = document.getElementById(`${t}Status`);
+        if (el) el.textContent = "Pending";
     });
 
     try {
-        // Trigger ETL
-        const response = await fetch(`${FASTAPI_URL}/pipeline/run`, { method: "POST" });
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-        const data = await response.json();
+        const resp = await fetch(`${FASTAPI_URL}/pipeline/run`, { method: "POST" });
+        const data = await resp.json();
+        runId = data.run_id;
 
-        // Mark all tasks as finished
-        tasks.forEach(task => {
-            const taskEl = document.getElementById(`${task}Status`);
-            if (taskEl) taskEl.textContent = "Finished";
-        });
+        const interval = setInterval(async () => {
+            const statusResp = await fetch(`${FASTAPI_URL}/pipeline/status/${runId}`);
+            const statusData = await statusResp.json();
 
-        statusEl.textContent = data.message;
+            tasks.forEach(t => {
+                const el = document.getElementById(`${t}Status`);
+                if (el) el.textContent = statusData.tasks[t];
+            });
 
-        // Display results in <pre>
-        const results = data.results;
-        let output = "";
-        for (const [source, value] of Object.entries(results)) {
-            output += `--- ${source.toUpperCase()} ---\n`;
-            output += JSON.stringify(value, null, 2) + "\n\n";
-        }
-        dataPre.textContent = output;
+            let output = "";
+            for (const [source, val] of Object.entries(statusData.results)) {
+                output += `--- ${source.toUpperCase()} ---\n`;
+                output += JSON.stringify(val, null, 2) + "\n\n";
+            }
+            dataPre.textContent = output;
+
+            if (Object.values(statusData.tasks).every(s => s === "Finished")) {
+                clearInterval(interval);
+                statusEl.textContent = "Pipeline completed";
+            }
+        }, 1000);
 
     } catch (err) {
-        statusEl.textContent = "Error running pipeline";
+        statusEl.textContent = "Error starting pipeline";
         console.error(err);
     }
 });
