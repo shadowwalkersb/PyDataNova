@@ -7,3 +7,4 @@ python-dotenv
 polars
 pyarrow
 pandas
+httpx

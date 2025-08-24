@@ -1,24 +1,20 @@
-import polars as pl
+import httpx
+import pandas as pd
+from io import StringIO
 
-def extract():
-    # Dummy CSV or mock data
-    data = pl.DataFrame({
-        "id": [1, 2, 3],
-        "name": ["Alice", "Bob", "Charlie"],
-        "value": [10, 20, 30]
-    })
-    return data
+CSV_URL = "https://raw.githubusercontent.com/corgis-edu/corgis/master/website/datasets/csv/weather/weather.csv"
 
-def transform(df: pl.DataFrame):
-    # Simple transformation: double the value
-    return df.with_columns((df["value"] * 2).alias("value_transformed"))
+def extract_csv(url: str) -> pd.DataFrame:
+    """Download CSV from URL and return as DataFrame"""
+    resp = httpx.get(url)
+    resp.raise_for_status()
+    return pd.read_csv(StringIO(resp.text))
 
-def load(df: pl.DataFrame):
-    df_pd = df.to_pandas()
-    return len(df)
+def transform_weather(df: pd.DataFrame) -> dict:
+    """Compute average temperature per state (top 5 states for demo)"""
+    return df.groupby("Station.State")["Data.Temperature.Avg Temp"].mean().head(5).to_dict()
 
-def etl_flow():
-    df = extract()
-    df_transformed = transform(df)
-    rows_inserted = load(df_transformed)
-    return {"rows_inserted": rows_inserted}
+def run_pipeline() -> dict:
+    """Run the ETL pipeline and return results"""
+    df = extract_csv(CSV_URL)
+    return {"weather": transform_weather(df)}

@@ -1,10 +1,15 @@
 from fastapi import APIRouter
 from fastapi.responses import JSONResponse
-from core.pipelines.etl import etl_flow
+from core.pipelines.etl import run_pipeline
 
 router = APIRouter()
 
 @router.post("/run")
-async def run_pipeline():
-    result = etl_flow()
-    return JSONResponse(content={"message": f"Pipeline finished. Rows inserted: {result['rows_inserted']}"})
+async def pipeline_run():
+    """Trigger the ETL pipeline and return results"""
+    results = run_pipeline()
+    return JSONResponse(
+        content={"message": "Pipeline finished", "results": results},
+        status_code=200
+    )
+
