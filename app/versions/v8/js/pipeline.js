@@ -59,3 +59,11 @@ runBtn.addEventListener("click", async () => {
         console.error(err);
     }
 });
+
+const progressBar = document.getElementById("progressBar");
+
+// Count finished tasks
+const finishedCount = Object.values(statusData.tasks).filter(s => s === "Finished").length;
+const totalTasks = tasks.length;
+const percent = (finishedCount / totalTasks) * 100;
+progressBar.style.width = percent + "%";
