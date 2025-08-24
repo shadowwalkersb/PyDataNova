@@ -19,8 +19,15 @@ runBtn.addEventListener("click", async () => {
     })
     .then(data => {
         statusEl.textContent = data.message;
-        dataPre.textContent = JSON.stringify(data.results, null, 2);
 
+        // Display all sources in <pre>
+        const results = data.results;
+        let output = "";
+        for (const [source, value] of Object.entries(results)) {
+            output += `--- ${source.toUpperCase()} ---\n`;
+            output += JSON.stringify(value, null, 2) + "\n\n";
+        }
+        dataPre.textContent = output;
     })
     .catch(err => {
         statusEl.textContent = "Error running pipeline";
