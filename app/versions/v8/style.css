@@ -95,9 +95,25 @@ form button:hover {
 /* Pipeline button specific */
 #runPipelineBtn {
     padding: 6px 12px;
-    background-color: #28a745;
+    background-color: #28a745; /* green */
     color: white;
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    margi
+    margin: 10px 0; /* added proper margin */
+    font-size: 1rem;
+    transition: background-color 0.2s ease;
+}
+
+#runPipelineBtn:hover {
+    background-color: #218838; /* slightly darker green on hover */
+}
+
+.pipeline-progress div {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.pipeline-progress span {
+    transition: color 0.3s ease;
+}

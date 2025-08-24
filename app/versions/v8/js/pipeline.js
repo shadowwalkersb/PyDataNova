@@ -13,7 +13,10 @@ runBtn.addEventListener("click", async () => {
     dataPre.textContent = "";
     tasks.forEach(t => {
         const el = document.getElementById(`${t}Status`);
-        if (el) el.textContent = "Pending";
+        if (el) {
+            el.textContent = "Pending";
+            el.style.color = "gray";
+        }
     });
 
     try {
@@ -27,9 +30,16 @@ runBtn.addEventListener("click", async () => {
 
             tasks.forEach(t => {
                 const el = document.getElementById(`${t}Status`);
-                if (el) el.textContent = statusData.tasks[t];
+                if (el) {
+                    const state = statusData.tasks[t];
+                    el.textContent = state;
+                    if (state === "Running") el.style.color = "orange";
+                    else if (state === "Finished") el.style.color = "green";
+                    else el.style.color = "gray";
+                }
             });
 
+            // Show results if available
             let output = "";
             for (const [source, val] of Object.entries(statusData.results)) {
                 output += `--- ${source.toUpperCase()} ---\n`;
@@ -37,9 +47,10 @@ runBtn.addEventListener("click", async () => {
             }
             dataPre.textContent = output;
 
+            // Stop polling if all finished
             if (Object.values(statusData.tasks).every(s => s === "Finished")) {
                 clearInterval(interval);
-                statusEl.textContent = "Pipeline completed";
+                statusEl.textContent = "Pipeline completed ✅";
             }
         }, 1000);
 
