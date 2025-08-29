@@ -10,7 +10,13 @@
     <main class="container">
         <div class="pane">
             <h2>Version: <span class="version-name" aria-label="v14">v14</span></h2>
-            <p>This is the v14 version of the PyDataNova portfolio.</p>
+
+            <div class="button-stack">
+                <button onclick="callV14Pipeline()">Run ETL Pipeline</button>
+            </div>
+
+            <pre id="v14-output" class="output"></pre>
+
         </div>
     </main>
 
