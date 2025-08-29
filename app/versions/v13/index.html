@@ -1,34 +1,77 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>PyDataNova v13 API Showcase</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <title>PyDataNova v13 — API Showcase</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <h1>PyDataNova v13 API Showcase</h1>
+  <h1>PyDataNova v13 — API Showcase</h1>
 
-  <section>
-    <h2>REST API (FastAPI)</h2>
-    <button onclick="callRest('/analytics/summary')">Analytics Summary</button>
-    <button onclick="callRest('/ml/predict')">ML Predict</button>
-    <button onclick="callRest('/rpc/echo')">RPC-style Echo</button>
-    <pre id="rest-output"></pre>
-  </section>
+  <div class="panes">
+    <!-- REST Pane -->
+    <section class="pane">
+      <header>
+        <h2>REST (FastAPI)</h2>
+        <!-- <p class="sub">http://localhost:8000</p> -->
+        <p class="sub">
+            <a href="http://localhost:8000" target="_blank">http://localhost:8000</a>
+        </p>
 
-  <section>
-    <h2>GraphQL API</h2>
-    <button onclick="callGraphQL('{ analyticsSummary { mean std } }')">Analytics Summary</button>
-    <!-- <button onclick="callGraphQL('{ mlPredict(input: \"test\") { label score } }')">ML Predict</button> -->
-    <pre id="graphql-output"></pre>
-  </section>
+      </header>
 
-  <section>
-    <h2>Flask API (Comparison)</h2>
-    <button onclick="callFlask('/analytics/summary')">Analytics Summary</button>
-    <button onclick="callFlask('/ml/predict')">ML Predict</button>
-    <pre id="flask-output"></pre>
-  </section>
+      <div class="button-stack">
+        <button onclick="callRest('/analytics/summary')">Analytics Summary</button>
+        <button onclick="callRest('/ml/predict')">ML Predict</button>
+        <button onclick="callRest('/rpc/echo')">RPC-style Echo</button>
+      </div>
+
+      <pre id="rest-output" class="output"></pre>
+    </section>
+
+    <!-- GraphQL Pane -->
+    <section class="pane">
+      <header>
+        <h2>GraphQL</h2>
+        <!-- <p class="sub">http://localhost:8000/graphql</p> -->
+        <p class="sub">
+            <a href="http://localhost:8000/graphql" target="_blank">http://localhost:8000/graphql</a>
+        </p>
+
+      </header>
+
+      <div class="button-stack">
+        <button onclick="callGraphQL(`{ hello }`)">
+          Hello
+        </button>
+        <button onclick="callGraphQL(`{ analyticsSummary { mean std } }`)">
+          Analytics Summary
+        </button>
+        <button onclick='callGraphQL(`{ mlQuery(inputText: "cat on mat") { prediction confidence } }`)'>
+          ML Query
+        </button>
+      </div>
+
+      <pre id="graphql-output" class="output"></pre>
+    </section>
+
+    <!-- Flask Pane -->
+    <section class="pane">
+      <header>
+        <h2>Flask (Comparison)</h2>
+        <p class="sub">
+            <a href="http://localhost:5000" target="_blank">http://localhost:5000</a>
+        </p>
+      </header>
+
+      <div class="button-stack">
+        <button onclick="callFlask('/analytics/summary')">Analytics Summary</button>
+        <button onclick="callFlask('/ml/predict')">ML Predict</button>
+      </div>
+
+      <pre id="flask-output" class="output"></pre>
+    </section>
+  </div>
 
   <script src="js/main.js"></script>
 </body>
