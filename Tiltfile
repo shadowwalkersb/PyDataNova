@@ -12,7 +12,7 @@ docker_build('pydata-v14-flask', 'app/api/flask_service', dockerfile='app/api/fl
 k8s_resource('flask', port_forwards=8001)
 
 # Frontend service
-docker_build('pydata-v14-frontend', 'app/versions/v14', dockerfile='app/versions/v14/Dockerfile')
+docker_build('pydata-v14-frontend', 'app/', dockerfile='app/Dockerfile')
 k8s_resource('frontend', port_forwards=5500)
 
 # Optional: ETL/pipeline service relies on manifest only
