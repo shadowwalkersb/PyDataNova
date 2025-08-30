@@ -10,6 +10,9 @@ import time
 
 app = FastAPI(title="Pipeline Service")
 
+# Simple in-memory store for demo
+FLOW_RUNS = {}
+
 @router.post("/run")
 async def pipeline_run():
     run_id = str(uuid4())
