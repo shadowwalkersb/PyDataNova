@@ -16,3 +16,9 @@ docker_build('pydata-v14-frontend', 'app/', dockerfile='app/Dockerfile')
 k8s_resource('frontend', port_forwards=5500)
 
 # Optional: ETL/pipeline service relies on manifest only
+# Existing watches for APIs and frontend remain
+k8s_yaml('k8s/prometheus-config.yaml')
+k8s_yaml('k8s/prometheus-deployment.yaml')
+k8s_yaml('k8s/namespace-monitoring.yaml')
+# Grafana
+k8s_yaml('k8s/grafana.yaml')
