@@ -16,7 +16,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Generate config.js from template
-        working-directory: ./app/versions/v4/js
+        working-directory: ./app/js
         env:
           FASTAPI_URL: ${{ secrets.FASTAPI_URL }}
           FLASK_URL: ${{ secrets.FLASK_URL }}

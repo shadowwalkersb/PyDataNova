@@ -1,4 +1,4 @@
-import { FASTAPI_URL } from './config.js';
+import { FASTAPI_URL } from '../../../js/config.js';
 
 const fetchRootBtn = document.getElementById("btn-root");
 const fetchUsersBtn = document.getElementById("btn-users");
