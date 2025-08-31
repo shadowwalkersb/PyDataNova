@@ -11,3 +11,4 @@ polars
 pyarrow
 # pyspark
 prefect
+strawberry-graphql
