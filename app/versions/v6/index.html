@@ -10,20 +10,44 @@
 
 <div class="pane" id="fastapi-pane">
   <h2>FastAPI</h2>
+
   <div id="fastapi-root">Root</div>
+
   <div id="fastapi-users">Loading Users...</div>
+  <form id="fastapi-user-form">
+    <input type="text" name="first" placeholder="First Name" required>
+    <input type="text" name="last" placeholder="Last Name" required>
+    <button type="submit">Add User</button>
+  </form>
+
   <div id="fastapi-items">Loading Items...</div>
-  <form id="fastapi-user-form">User</form>
-  <form id="fastapi-item-form">Item</form>
+  <form id="fastapi-item-form">
+    <input type="text" name="name" placeholder="Item" required>
+    <input type="text" name="category" placeholder="Category" required>
+    <input type="number" name="price" placeholder="Price" required>
+    <button type="submit">Add Item</button>
+  </form>
 </div>
 
 <div class="pane" id="flask-pane">
   <h2>Flask</h2>
+
   <div id="flask-root">Root</div>
+
   <div id="flask-users">Loading Users...</div>
+  <form id="flask-user-form">
+    <input type="text" name="first" placeholder="First Name" required>
+    <input type="text" name="last" placeholder="Last Name" required>
+    <button type="submit">Add User</button>
+  </form>
+
   <div id="flask-items">Loading Items...</div>
-  <form id="flask-user-form">Users</form>
-  <form id="flask-item-form">Items</form>
+  <form id="flask-item-form">
+    <input type="text" name="name" placeholder="Item" required>
+    <input type="text" name="category" placeholder="Category" required>
+    <input type="number" name="price" placeholder="Price" required>
+    <button type="submit">Add Item</button>
+  </form>
 </div>
 
 </body>
