@@ -36,3 +36,24 @@ async def add_user(user: User):
         except Exception as e:
             raise HTTPException(status_code=500, detail=str(e))
     return dict(new_user._mapping)
+
+@router.post("/")
+async def add_user(request: Request):
+    data = await request.json()  # raw JSON
+    print(data)
+    first = data.get("first")
+    last = data.get("last")
+    if not first or not last:
+        raise HTTPException(status_code=400, detail="Missing first or last name")
+
+    with engine.begin() as conn:  # auto-commit
+        conn.execute(
+            text("INSERT INTO users (first, last) VALUES (:first, :last)"),
+            {"first": first, "last": last}
+        )
+    return {"status": "ok"}
+    # return [
+    #     { "id": 1, "name": "John Doe", "email": "john@example.com" },
+    #     { "id": 2, "name": "Jane Smith", "email": "jane@example.com" },
+    #     { "id": 3, "name": "Alice Johnson", "email": "alice@example.com" }
+    #     ]
