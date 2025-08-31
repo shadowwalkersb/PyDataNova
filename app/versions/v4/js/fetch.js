@@ -21,7 +21,7 @@ fetchUsersBtn.addEventListener('click', async () => {
     try {
         const response = await fetch(`${FASTAPI_URL}/users`);
         const data = await response.json();
-        responseDiv.innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+        renderMockData(data);
     } catch (err) {
         console.error(err);
         renderMessage("Error fetching mock data");
@@ -32,7 +32,7 @@ fetchItemsBtn.addEventListener('click', async () => {
     try {
         const response = await fetch(`${FASTAPI_URL}/items`);
         const data = await response.json();
-        responseDiv.innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+        renderMockData(data);
     } catch (err) {
         console.error(err);
         renderMessage("Error fetching mock data");
@@ -53,5 +53,33 @@ function renderMessage(message) {
     cell.textContent = message;
     row.appendChild(cell);
     table.appendChild(row);
+    responseDiv.appendChild(table);
+}
+
+// Render mock data as a table
+function renderMockData(data) {
+    clearTable();
+    const table = document.createElement("table");
+
+    // Table header
+    const headerRow = document.createElement("tr");
+    data.columns.forEach(col => {
+        const th = document.createElement("th");
+        th.textContent = col;
+        headerRow.appendChild(th);
+    });
+    table.appendChild(headerRow);
+
+    // Table rows
+    data.rows.forEach(rowData => {
+        const row = document.createElement("tr");
+        rowData.forEach(cellData => {
+            const td = document.createElement("td");
+            td.textContent = cellData;
+            row.appendChild(td);
+        });
+        table.appendChild(row);
+    });
+
     responseDiv.appendChild(table);
 }
