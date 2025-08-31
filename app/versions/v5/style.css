@@ -1,0 +1,35 @@
+body {
+  margin: 0;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+h1 {
+  color: #1e3a8a;
+  margin: 10px 0;
+  text-align: center;
+}
+
+#backends {
+  display: flex;
+  height: 100vh; /* full viewport height */
+}
+
+#fastapi-panel, #flask-panel {
+  flex: 1;
+  padding: 10px;
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+
+#fastapi-panel {
+  border-right: 1px solid #ccc;
+}
+
+pre {
+  background: #111;
+  color: #0f0;
+  padding: 10px;
+  font-family: monospace;
+  max-height: 70%;
+  overflow-y: auto;
+}
