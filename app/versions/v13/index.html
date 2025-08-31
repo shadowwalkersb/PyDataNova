@@ -1,20 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PyDataNova v13</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <title>PyDataNova v13 API Showcase</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <main class="container">
-        <div class="pane">
-            <h2>Version: <span class="version-name" aria-label="v13">v13</span></h2>
-            <p>This is the v13 version of the PyDataNova portfolio.</p>
-        </div>
-    </main>
+  <h1>PyDataNova v13 API Showcase</h1>
 
-    <script type="module" src="js/config.js"></script>
-    <script type="module" src="js/main.js"></script>
+  <section>
+    <h2>REST API (FastAPI)</h2>
+    <button onclick="callRest('/analytics/summary')">Analytics Summary</button>
+    <button onclick="callRest('/ml/predict')">ML Predict</button>
+    <button onclick="callRest('/rpc/echo')">RPC-style Echo</button>
+    <pre id="rest-output"></pre>
+  </section>
+
+  <section>
+    <h2>GraphQL API</h2>
+    <button onclick="callGraphQL('{ analyticsSummary { mean std } }')">Analytics Summary</button>
+    <!-- <button onclick="callGraphQL('{ mlPredict(input: \"test\") { label score } }')">ML Predict</button> -->
+    <pre id="graphql-output"></pre>
+  </section>
+
+  <section>
+    <h2>Flask API (Comparison)</h2>
+    <button onclick="callFlask('/analytics/summary')">Analytics Summary</button>
+    <button onclick="callFlask('/ml/predict')">ML Predict</button>
+    <pre id="flask-output"></pre>
+  </section>
+
+  <script src="js/main.js"></script>
 </body>
 </html>
