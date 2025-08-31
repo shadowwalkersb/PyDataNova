@@ -2,9 +2,9 @@
 
 PyDataNova is an experimental, modular data pipeline and infrastructure project, designed to evolve from a simple 'Hello World' example into a full-featured template for modern backend, data engineering, and deployment workflows.
 
-This repository will serve as:
+This repository serves as:
 - A **learning and reference** environment for backend + data tooling.
-- A **progressive showcase** of alternative tech stacks (FastAPI, React, orchestration, etc.)
+- A **progressive showcase** of alternative tech stacks across versions.
 - A **potential cookiecutter template** for bootstrapping production-ready projects.
 
 ## Project Structure
@@ -12,11 +12,14 @@ This repository will serve as:
 ```
 PyDataNova/
 ├── app/                # Frontend
+│   ├── js/             # Common JS for all versions
+│   │   └── config.js
 │   ├── versions/
 │   │   ├── v1/         # Basic static HTML
 │   │   ├── v2/         # Added CSS/JS interactivity
 │   │   ├── v3/         # Table display with mock data
-│   │   └── v4/         # API inspector + buttons
+│   │   ├── v4/         # API inspector + buttons
+│   │   └── v5/         # Dual Backend demo
 │   └── index.html      # Main landing page
 └── README.md
 ```
@@ -43,10 +46,15 @@ PyDataNova/
 - Buttons to fetch `/`, `/users`, `/items`.
 - Dynamic response panel for live results.
 
+### [v5 – Dual Backend](#v5--dual-backend)
+- Introduces **two backend services**: FastAPI + Flask.
+- Buttons in the UI fetch data from **both backends**.
+- Displays responses in separate panels for comparison.
+- Demonstrates **multi-backend integration** and modular fetch logic.
+
 ## Roadmap
 
-### v5+
-- Introduce real FastAPI backend.
+### v6+
 - Add modular ETL/data pipeline demos.
 - Integrate orchestration tools (Prefect, Airflow).
 - Experiment with distributed task queues (Celery, Kafka).
