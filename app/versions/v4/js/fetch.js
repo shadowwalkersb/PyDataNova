@@ -19,7 +19,7 @@ fetchRootBtn.addEventListener("click", async () => {
 
 fetchUsersBtn.addEventListener("click", async () => {
     try {
-        const response = await fetch(`${FASTAPI_URL}/users`);
+        const response = await fetch(`${FASTAPI_URL}/users-mock`);
         const data = await response.json();
         renderFlexibleTable(data);
     } catch (err) {
@@ -30,7 +30,7 @@ fetchUsersBtn.addEventListener("click", async () => {
 
 fetchItemsBtn.addEventListener("click", async () => {
     try {
-        const response = await fetch(`${FASTAPI_URL}/items`);
+        const response = await fetch(`${FASTAPI_URL}/items-mock`);
         const data = await response.json();
         renderFlexibleTable(data);
     } catch (err) {
