@@ -13,11 +13,7 @@
     <section class="pane">
       <header>
         <h2>REST (FastAPI)</h2>
-        <!-- <p class="sub">http://localhost:8000</p> -->
-        <p class="sub">
-            <a href="http://localhost:8000" target="_blank">http://localhost:8000</a>
-        </p>
-
+        <p class="sub" id="fastapi-link"></p>
       </header>
 
       <div class="button-stack">
@@ -33,11 +29,7 @@
     <section class="pane">
       <header>
         <h2>GraphQL</h2>
-        <!-- <p class="sub">http://localhost:8000/graphql</p> -->
-        <p class="sub">
-            <a href="http://localhost:8000/graphql" target="_blank">http://localhost:8000/graphql</a>
-        </p>
-
+        <p class="sub" id="graphql-link"></p>
       </header>
 
       <div class="button-stack">
@@ -59,9 +51,7 @@
     <section class="pane">
       <header>
         <h2>Flask (Comparison)</h2>
-        <p class="sub">
-            <a href="http://localhost:5000" target="_blank">http://localhost:5000</a>
-        </p>
+        <p class="sub" id="flask-link"></p>
       </header>
 
       <div class="button-stack">
@@ -73,6 +63,8 @@
     </section>
   </div>
 
-  <script src="js/main.js"></script>
+  <!-- JS Config and Main Scripts -->
+  <script type="module" src="js/config.js"></script>
+  <script type="module" src="js/main.js"></script>
 </body>
 </html>
