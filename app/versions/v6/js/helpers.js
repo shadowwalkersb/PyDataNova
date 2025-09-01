@@ -50,7 +50,7 @@ function renderList(container, data) {
 }
 
 // Generic function: decide list vs table
-export function renderData(containerId, data) {
+function renderData(containerId, data) {
   const container = document.getElementById(containerId);
   container.innerHTML = ""; // clear old content
 
@@ -70,4 +70,16 @@ export function renderData(containerId, data) {
   } else {
     renderList(container, data);
   }
+}
+
+export function fetchAndDisplay(url, id) {
+  fetch(url)
+  .then(response => response.json())
+  .then(data => {
+    renderData(id, data);
+  })
+  .catch(error => {
+    console.error(error);
+    document.getElementById(id).textContent = "Failed to fetch data";
+  });
 }
