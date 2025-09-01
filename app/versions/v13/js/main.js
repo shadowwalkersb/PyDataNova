@@ -33,3 +33,22 @@ async function callFlask(endpoint) {
     document.getElementById("flask-output").textContent = "Error: " + err;
   }
 }
+
+// Dynamically insert API links into HTML
+function setApiLinks() {
+  document.getElementById('fastapi-link').innerHTML =
+    `<a href="${FASTAPI_URL}" target="_blank">${FASTAPI_URL}</a>`;
+
+  document.getElementById('graphql-link').innerHTML =
+    `<a href="${FASTAPI_URL}/graphql" target="_blank">${FASTAPI_URL}/graphql</a>`;
+
+  document.getElementById('flask-link').innerHTML =
+    `<a href="${FLASK_URL}" target="_blank">${FLASK_URL}</a>`;
+}
+
+window.callRest = callRest;
+window.callGraphQL = callGraphQL;
+window.callFlask = callFlask;
+
+// Initialize dynamic links on page load
+setApiLinks();
