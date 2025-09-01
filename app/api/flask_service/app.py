@@ -4,6 +4,8 @@ from flask_service.routes.users_mock import bp as users_mock_bp
 from flask_service.routes.items_mock import bp as items_mock_bp
 from flask_service.routes.users import bp as users_bp
 from flask_service.routes.items import bp as items_bp
+# from routes.users import bp as users_bp
+from routes.items import bp as items_bp
 
 app = Flask(__name__)
 
@@ -16,6 +18,8 @@ CORS(app, origins=[
 app.register_blueprint(users_mock_bp, url_prefix="/users-mock")
 app.register_blueprint(items_mock_bp, url_prefix="/items-mock")
 app.register_blueprint(users_bp, url_prefix="/users")
+# Register blueprints
+# app.register_blueprint(users_bp, url_prefix="/users")
 app.register_blueprint(items_bp, url_prefix="/items")
 
 @app.route("/")
