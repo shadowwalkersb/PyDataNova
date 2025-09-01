@@ -19,7 +19,8 @@ PyDataNova/
 │   │   ├── v2/         # Added CSS/JS interactivity
 │   │   ├── v3/         # Table display with mock data
 │   │   ├── v4/         # API inspector + buttons
-│   │   └── v5/         # Dual Backend demo
+│   │   ├── v5/         # Dual Backend demo
+│   │   └── v6/         # Mock data + dynamic backend panes
 │   └── index.html      # Main landing page
 └── README.md
 ```
@@ -52,15 +53,19 @@ PyDataNova/
 - Displays responses in separate panels for comparison.
 - Demonstrates **multi-backend integration** and modular fetch logic.
 
-## Roadmap
+### [v6 – Mock Data + Dynamic Panes](#v6--mock-data--dynamic-panes)
+- Frontend dynamically generates panes for FastAPI and Flask.
+- Uses **mock data only** (read-only).
+- POST buttons visible but **disabled**, tooltip: "CRUD support coming in v7".
+- Info banner shows current version.
 
-### v6+
-- Add modular ETL/data pipeline demos.
-- Integrate orchestration tools (Prefect, Airflow).
-- Experiment with distributed task queues (Celery, Kafka).
-- Add cloud deployment (AWS, Terraform, Kubernetes).
-- Extend monitoring (Prometheus + Grafana).
-- Extract reusable cookiecutter template.
+## Roadmap
+### v7+ (Future)
+- v7: Real DB CRUD (NeonDB/PostgreSQL).
+- v8: ETL pipelines with Prefect (mock data or real DB).
+- v9: GraphQL API, optional Golang microservice, analytics with Polars/Dask.
+- v10: Infrastructure deployment (Docker/Kubernetes/Tilt/Terraform/AWS).
+- Later: Kafka, Airflow, ML/AI demos, Image/Face processing, Sentinel.
 
 ## Tech Stack (Planned)
 - **Languages:** Python, JavaScript

@@ -5,6 +5,7 @@ const backends = [
 ];
 
 backends.forEach(({ id, title }) => {
+  const container = document.getElementById('backend-container');
   const pane = document.createElement('div');
   pane.className = 'pane';
   pane.id = `${id}-pane`;
@@ -31,6 +32,6 @@ backends.forEach(({ id, title }) => {
     </form>
   `;
 
-  document.body.appendChild(pane);
+  container.appendChild(pane);
 
 });
