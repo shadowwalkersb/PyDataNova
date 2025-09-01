@@ -1,9 +1,15 @@
 import { FASTAPI_URL, FLASK_URL } from "../../../js/config.js";
 import { fetchAndDisplay } from "./helpers.js";
 
-fetchAndDisplay(FASTAPI_URL + "/", 'fastapi-root');
-fetchAndDisplay(FASTAPI_URL + "/users/", 'fastapi-users');
-fetchAndDisplay(FASTAPI_URL + "/items/", 'fastapi-items');
-fetchAndDisplay(FLASK_URL + "/", 'flask-root');
-fetchAndDisplay(FLASK_URL + "/users/", 'fastapi-users');
-fetchAndDisplay(FLASK_URL + "/items/", 'fastapi-items');
+const endpoints = [
+  { url: `${FASTAPI_URL}/`, id: "fastapi-root" },
+  { url: `${FASTAPI_URL}/users/`, id: "fastapi-users" },
+  { url: `${FASTAPI_URL}/items/`, id: "fastapi-items" },
+  { url: `${FLASK_URL}/`, id: "flask-root" },
+  { url: `${FLASK_URL}/users/`, id: "flask-users" },
+  { url: `${FLASK_URL}/items/`, id: "flask-items" }
+];
+
+endpoints.forEach(({url, id}) => {
+  fetchAndDisplay(url, id);
+});
