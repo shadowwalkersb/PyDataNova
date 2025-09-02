@@ -10,8 +10,8 @@ services:
 
   fastapi:
     build:
-      context: ./api
-      dockerfile: fastapi_service/Dockerfile
+      context: ./api/fastapi_service
+      dockerfile: Dockerfile
     ports:
       - "8000:8000"
     volumes:
@@ -20,8 +20,8 @@ services:
 
   flask:
     build:
-      context: ./api
-      dockerfile: flask_service/Dockerfile
+      context: ./api/flask_service
+      dockerfile: Dockerfile
     ports:
       - "8001:5000"
     volumes:
