@@ -1,4 +1,13 @@
 services:
+  web:
+    image: python:3.11-slim
+    working_dir: /usr/src/app
+    volumes:
+      - .:/usr/src/app
+    command: python -m http.server 5500
+    ports:
+      - "5500:5500"
+
   fastapi:
     build:
       context: ./api
