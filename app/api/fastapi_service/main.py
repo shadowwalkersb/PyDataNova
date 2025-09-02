@@ -12,9 +12,11 @@ from typing import List
 
 from strawberry.fastapi import GraphQLRouter
 from pydantic import BaseModel
+from typing import List, Optional
 import strawberry
 
-app = FastAPI()
+# ---------------- FASTAPI APP ----------------
+app = FastAPI(title="PyDataNova FastAPI v14")
 
 origins = [
     "https://shadowwalkersb.github.io",
@@ -27,9 +29,13 @@ class User(BaseModel):
     id: int
     name: str
 
-class Item(BaseModel):
-    id: int
-    description: str
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 app.include_router(users_mock_router, prefix="/users-mock", tags=["users-mock"])
 app.include_router(items_mock_router, prefix="/items-mock", tags=["items-mock"])
@@ -42,6 +48,10 @@ async def root():
     return {"message": "PyDataNova FastAPI Service running..."}
 
 # ---------------- REST ENDPOINTS ----------------
+@app.get("/")
+async def root():
+    return {"message": "Welcome to PyDataNova FastAPI v14"}
+
 @app.get("/users")
 def get_users():
     return [{"id": 1, "name": "Alice"}, {"id": 2, "name": "Bob"}]
@@ -50,7 +60,7 @@ def get_users():
 def get_items():
     return [{"id": 101, "description": "Item A"}, {"id": 102, "description": "Item B"}]
 
-@app.get("/pipeline/run")
+@app.get("/pipeline/v14/run")
 def run_pipeline():
     return {"status": "Pipeline started", "version": "v14"}
 
@@ -63,8 +73,8 @@ def ml_predict():
     return {"prediction": "class_A", "confidence": 0.87}
 
 @app.post("/rpc/echo")
-def rpc_echo(payload: dict):
-    return {"echo": payload}
+def rpc_echo(payload: Optional[dict] = None):
+    return {"echo": payload or {"message": "hello"}}
 
 @app.post("/image/face-detect")
 def face_detect():
@@ -75,6 +85,16 @@ def enhance_image():
     return {"status": "Image enhanced successfully"}
 
 # ---------------- GRAPHQL ----------------
+@strawberry.type
+class UserType:
+    id: int
+    name: str
+
+@strawberry.type
+class ItemType:
+    id: int
+    description: str
+
 @strawberry.type
 class AnalyticsSummary:
     users: int
@@ -90,20 +110,24 @@ class MLResult:
 class Query:
     @strawberry.field
     def hello(self) -> str:
-        return "Hello from FastAPI + GraphQL"
+        return "Hello from FastAPI + GraphQL v14"
 
     @strawberry.field
-    def top_users(self) -> list[User]:
-        return [User(id=1, name="Alice"), User(id=2, name="Bob")]
+    def top_users(self) -> List[UserType]:
+        return [UserType(id=1, name="Alice"), UserType(id=2, name="Bob")]
 
     @strawberry.field
     def analytics_summary(self) -> AnalyticsSummary:
         return AnalyticsSummary(users=120, items=450, sales=9820.55)
 
     @strawberry.field
-    def ml_query(self) -> MLResult:
-        return MLResult(prediction="class_A", confidence=0.87)
+    def ml_query(self, input_text: str) -> MLResult:
+        # simple dummy logic
+        if "cat" in input_text.lower():
+            return MLResult(prediction="cat", confidence=0.92)
+        return MLResult(prediction="other", confidence=0.67)
 
+# Create and mount GraphQL router
 schema = strawberry.Schema(query=Query)
 graphql_app = GraphQLRouter(schema)
 app.include_router(graphql_app, prefix="/graphql")

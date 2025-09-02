@@ -84,7 +84,7 @@ button {
 
 button:hover { background: var(--brand-dark); }
 
-.output {
+#output {
   background: var(--code);
   border-radius: 10px;
   padding: 12px;
