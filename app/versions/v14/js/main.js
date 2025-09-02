@@ -1,27 +1,40 @@
 import { FASTAPI_URL } from "./config.js";
 
-const v14OutputEl = document.getElementById("v14-output");
-const v14Btn = document.getElementById("v14-run-btn");
+const outputEl = document.getElementById("output");
 
-async function runV14Pipeline() {
-  // Disable button and show running status
-  v14Btn.disabled = true;
-  const originalText = v14Btn.textContent;
-  v14Btn.textContent = "Running…";
+function showResult(data) {
+  outputEl.textContent = JSON.stringify(data, null, 2);
+}
 
-  v14OutputEl.textContent = "";
+// generic fetch helper
+async function callAPI(endpoint, method = "GET") {
+  const url = `${FASTAPI_URL}${endpoint}`;
+  let options = { method };
+
+  if (method === "POST") {
+    options.headers = { "Content-Type": "application/json" };
+    options.body = JSON.stringify({ message: "Hello from frontend" });
+  }
 
   try {
-    const res = await fetch(`${FASTAPI_URL}/pipeline/run`, { method: "POST" });
-    const data = await res.json();
-    v14OutputEl.textContent = JSON.stringify(data, null, 2);
+    const resp = await fetch(url, options);
+    const data = await resp.json();
+    showResult(data);
   } catch (err) {
-    v14OutputEl.textContent = "Error: " + err;
-  } finally {
-    // Restore button state
-    v14Btn.disabled = false;
-    v14Btn.textContent = originalText;
+    showResult({ error: err.message });
   }
 }
 
-v14Btn.addEventListener("click", runV14Pipeline);
+// root fetch on page load
+document.addEventListener("DOMContentLoaded", () => {
+  callAPI("/");  // display root response
+
+  // attach all button clicks
+  document.querySelectorAll(".button-stack button").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const endpoint = btn.getAttribute("data-endpoint");
+      const method = btn.getAttribute("data-method");
+      callAPI(endpoint, method);
+    });
+  });
+});

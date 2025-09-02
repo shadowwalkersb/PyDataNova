@@ -1,26 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PyDataNova v14</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PyDataNova v14</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <main class="container">
-        <div class="pane" id="v14-pane">
-            <h2>Version: <span class="version-name" aria-label="v14">v14</span></h2>
+  <main class="container">
+    <div class="pane">
+      <h2>Version: <span class="version-name" aria-label="v14">v14</span></h2>
 
-            <div class="button-stack">
-                <button id="v14-run-btn">Run ETL Pipeline</button>
-            </div>
+      <div class="button-stack">
+        <button data-endpoint="/users" data-method="GET">Get Users</button>
+        <button data-endpoint="/items" data-method="GET">Get Items</button>
+        <button data-endpoint="/pipeline/v14/run" data-method="GET">Run ETL Pipeline</button>
+        <button data-endpoint="/analytics/summary" data-method="GET">Analytics Summary</button>
+        <button data-endpoint="/ml/predict" data-method="GET">ML Predict</button>
+        <button data-endpoint="/rpc/echo" data-method="POST">RPC Echo</button>
+        <button data-endpoint="/image/face-detect" data-method="POST">Face Detect</button>
+        <button data-endpoint="/image/enhance" data-method="POST">Enhance Image</button>
+      </div>
 
-            <pre id="v14-output" class="output"></pre>
+      <pre id="output"></pre>
+    </div>
+  </main>
 
-        </div>
-    </main>
-
-    <script type="module" src="js/config.js"></script>
-    <script type="module" src="js/main.js"></script>
+  <script type="module" src="js/config.js"></script>
+  <script type="module" src="js/main.js"></script>
 </body>
 </html>
