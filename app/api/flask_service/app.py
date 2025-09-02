@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 from flask_cors import CORS
 from flask_service.routes.users_mock import bp as users_mock_bp
 from flask_service.routes.items_mock import bp as items_mock_bp
@@ -22,6 +22,36 @@ app.register_blueprint(items_bp, url_prefix="/items")
 def index():
     return {"message": "PyDataNova Flask Service running..."}
 
+# Analytics endpoint
+@app.route("/analytics/summary")
+def analytics_summary():
+    # Dummy summary data
+    summary = {
+        "mean": 42.0,
+        "std": 3.14,
+        "count": 100
+    }
+    return jsonify(summary)
+
+# ML predict endpoint
+@app.route("/ml/predict", methods=["POST", "GET"])
+def ml_predict():
+    # Dummy prediction
+    input_text = request.args.get("inputText", "default") if request.method == "GET" else request.json.get("inputText", "default")
+    result = {
+        "input": input_text,
+        "prediction": "cat",
+        "confidence": 0.95
+    }
+    return jsonify(result)
+
+# RPC-style echo endpoint
+@app.route("/rpc/echo", methods=["POST", "GET"])
+def rpc_echo():
+    data = request.get_json() or {"message": "hello"}
+    return jsonify(data)
+
+# Image endpoints
 @app.route("/image/face-detect")
 def face_detect():
     return jsonify({"faces_detected": 2})
