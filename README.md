@@ -20,7 +20,7 @@ PyDataNova/
 │   │   ├── v3/         # Table display with mock data
 │   │   ├── v4/         # API inspector + buttons
 │   │   ├── v5/         # Dual Backend demo
-│   │   └── v6/         # Mock data + dynamic backend panes
+│   │   └── v6/         # Real DB + dynamic panes
 │   └── index.html      # Main landing page
 └── README.md
 ```
@@ -53,19 +53,20 @@ PyDataNova/
 - Displays responses in separate panels for comparison.
 - Demonstrates **multi-backend integration** and modular fetch logic.
 
-### [v6 – Mock Data + Dynamic Panes](#v6--mock-data--dynamic-panes)
-- Frontend dynamically generates panes for FastAPI and Flask.
-- Uses **mock data only** (read-only).
-- POST buttons visible but **disabled**, tooltip: "CRUD support coming in v7".
-- Info banner shows current version.
+### [v6 – Real DB + Dynamic Panes](#v6--real-db--dynamic-panes)
+- Integrated **real database** (Neon/PostgreSQL) for persistence.
+- Dynamic backend panes created in the frontend for FastAPI and Flask.
+- Forms to read and add users/items directly to the DB.
+- Demonstrates **end-to-end full-stack interaction** with real data.
+- CORS configured for local and GitHub Pages frontend.
 
 ## Roadmap
 ### v7+ (Future)
-- v7: Real DB CRUD (NeonDB/PostgreSQL).
-- v8: ETL pipelines with Prefect (mock data or real DB).
-- v9: GraphQL API, optional Golang microservice, analytics with Polars/Dask.
-- v10: Infrastructure deployment (Docker/Kubernetes/Tilt/Terraform/AWS).
-- Later: Kafka, Airflow, ML/AI demos, Image/Face processing, Sentinel.
+- ETL/data pipeline demos using Prefect.
+- Modular ingestion, transformation, and storage.
+- GraphQL API, optional Golang microservice, analytics with Polars/Dask.
+- Infrastructure deployment (Docker/Kubernetes/Tilt/Terraform/AWS).
+- Advanced orchestration, monitoring, and analytics.
 
 ## Tech Stack (Planned)
 - **Languages:** Python, JavaScript
