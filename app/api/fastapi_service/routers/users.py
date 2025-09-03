@@ -2,6 +2,7 @@ from fastapi import APIRouter, HTTPException
 from core.db.neon import fastapi_engine
 import pandas as pd
 from sqlalchemy import text
+from pydantic import BaseModel
 
 router = APIRouter()
 
@@ -15,3 +16,23 @@ async def get_users():
         return df.to_dict(orient="records")
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+# Pydantic model for request body
+class User(BaseModel):
+    first: str
+    last: str
+
+@router.post("/")
+async def add_user(user: User):
+    query = """
+    INSERT INTO users (first, last)
+    VALUES (:first, :last)
+    RETURNING id, first, last;
+    """
+    async with fastapi_engine.begin() as conn:
+        try:
+            result = await conn.execute(text(query), {"first": user.first, "last": user.last})
+            new_user = result.fetchone()
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=str(e))
+    return dict(new_user._mapping)
