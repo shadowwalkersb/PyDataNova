@@ -88,10 +88,3 @@ form button:hover {
     /* color: green; */
     margin-bottom: 0.5em;
 }
-
-button:disabled {
-  background-color: #ddd;
-  color: #777;
-  border: 1px solid #aaa;
-  cursor: not-allowed;
-}

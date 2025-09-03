@@ -13,9 +13,3 @@ const endpoints = [
 endpoints.forEach(({url, id}) => {
   fetchAndDisplay(url, id);
 });
-
-// Disable non-functional POST buttons in v6
-document.querySelectorAll(".post-btn").forEach(btn => {
-  btn.disabled = true;
-  btn.title = "CRUD support coming in v7";
-});

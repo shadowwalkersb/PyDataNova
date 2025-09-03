@@ -19,7 +19,7 @@ backends.forEach(({ id, title }) => {
     <form id="${id}-user-form">
       <input type="text" name="first" placeholder="First Name" required>
       <input type="text" name="last" placeholder="Last Name" required>
-      <button type="submit" class="post-btn">Add User</button>
+      <button type="submit">Add User</button>
     </form>
 
     <div id="${id}-items">Loading Items...</div>
@@ -28,7 +28,7 @@ backends.forEach(({ id, title }) => {
       <input type="text" name="category" placeholder="Category" required>
       <input type="number" name="price" placeholder="Price" required>
       <input type="number" name="owner_id" placeholder="Owner ID" required>
-      <button type="submit" class="post-btn">Add Item</button>
+      <button type="submit">Add Item</button>
     </form>
   `;
 
