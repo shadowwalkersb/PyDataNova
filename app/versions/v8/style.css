@@ -1,3 +1,4 @@
+/* Layout */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -13,11 +14,85 @@ body {
     min-height: 100vh;
 }
 
+/* Panes (for split layout if needed) */
+.pane {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    overflow-y: auto;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Headings */
 h1, h2 {
     margin-top: 0;
     text-align: center;
 }
 
+/* Tables */
+table {
+    border-collapse: collapse;
+    width: 100%;
+    margin-bottom: 1em;
+}
+
+th, td {
+    border: 1px solid #ccc;
+    padding: 5px 8px;
+    text-align: left;
+}
+
+th {
+    background-color: #f5f5f5;
+}
+
+/* Scrollable table body */
+.table-container {
+    overflow-x: auto;
+}
+
+/* Forms */
+form {
+    margin-bottom: 1em;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    align-items: center;
+}
+
+form input[type="text"],
+form input[type="number"],
+form select {
+    padding: 4px 6px;
+    flex: 1;
+    min-width: 80px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+
+form button {
+    padding: 5px 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+form button:hover {
+    background-color: #0056b3;
+}
+
+/* Messages */
+.message {
+    font-size: 0.9em;
+    color: #333;
+    margin-bottom: 0.5em;
+}
+
+/* Pipeline button specific */
 #runPipelineBtn {
     padding: 6px 12px;
     background-color: #28a745;
@@ -25,27 +100,4 @@ h1, h2 {
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    font-size: 1rem;
-    transition: background-color 0.2s ease;
-}
-
-#runPipelineBtn:hover {
-    background-color: #218838;
-}
-
-.sub-pane {
-    border: 1px dashed #aaa;
-    border-radius: 4px;
-    margin: 10px 0;
-    padding: 8px;
-    background-color: #fff;
-}
-
-.sub-pane-header {
-    font-weight: bold;
-    background-color: #e2e2e2;
-    padding: 4px 8px;
-    border-radius: 3px;
-    user-select: none;
-    cursor: pointer;
-}
+    margi
