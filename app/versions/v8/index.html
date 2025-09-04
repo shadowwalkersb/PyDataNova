@@ -1,19 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>v8 – ETL Orchestration</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <title>PyDataNova v8 – ETL Pipeline</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="container">
-    <h1>v8 – ETL Orchestration Dashboard</h1>
-    <button id="runPipelineBtn">Run Orchestration</button>
-    <p id="status">Status: idle</p>
+    <div class="pane">
+        <h2>v8 – Prefect ETL Pipeline</h2>
 
-    <h2>Polars Pipelines</h2>
-    <div id="polars-pane"></div>
-  </div>
-  <script type="module" src="js/fetch.js"></script>
+        <div class="pipeline-progress">
+            <div>CSV Task: <span id="csvStatus">Pending</span></div>
+            <div>API Task: <span id="apiStatus">Pending</span></div>
+        </div>
+
+        <button id="runPipelineBtn">Run Pipeline</button>
+        <div id="status"></div>
+
+        <h3>Pipeline Results</h3>
+        <pre id="dataPre" style="text-align: left; margin-top: 10px;"></pre>
+    </div>
+
+    <script type="module" src="js/config.js"></script>
+    <script type="module" src="js/helpers.js"></script>
+    <script type="module" src="js/pipeline.js"></script>
 </body>
 </html>
