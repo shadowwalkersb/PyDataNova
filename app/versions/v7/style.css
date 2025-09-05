@@ -36,6 +36,13 @@ h1, h2 {
 #runPipelineBtn:hover {
     background-color: #218838;
 }
+
+/* Status text */
+#status {
+    text-align: center;
+    font-weight: bold;
+}
+
 /* Two panes layout */
 .panes {
     display: flex;
