@@ -1,5 +1,42 @@
-.sub-pane {
-    border: 1px dashed #aaa;
+/* Layout */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px;
+    box-sizing: border-box;
+    min-height: 100vh;
+}
+
+/* Panes (for split layout if needed) */
+.pane {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    overflow-y: auto;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Headings */
+h1, h2 {
+    margin-top: 0;
+    text-align: center;
+}
+
+/* Pipeline button */
+#runPipelineBtn {
+    padding: 6px 12px;
+    background-color: #28a745;
+    color: white;
+    border: none;
     border-radius: 4px;
     margin: 10px 0;
     padding: 8px;
@@ -12,4 +49,43 @@
     padding: 4px 8px;
     border-radius: 3px;
     user-select: none;
+}
+
+/* Forms */
+form {
+    margin-bottom: 1em;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    align-items: center;
+}
+
+form input[type="text"],
+form input[type="number"],
+form select {
+    padding: 4px 6px;
+    flex: 1;
+    min-width: 80px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+
+form button {
+    padding: 5px 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+form button:hover {
+    background-color: #0056b3;
+}
+
+/* Messages */
+.message {
+    font-size: 0.9em;
+    color: #333;
+    margin-bottom: 0.5em;
 }
