@@ -5,25 +5,32 @@ const statusEl = document.getElementById("status");
 const polarsPre = document.getElementById("polars-output");
 const pysparkPre = document.getElementById("pyspark-output");
 
-runBtn.addEventListener("click", async () => {
+async function runPipeline() {
     statusEl.textContent = "Running pipelines...";
     polarsPre.textContent = "Loading...";
     pysparkPre.textContent = "Loading...";
 
     try {
-        // Fetch Polars pipeline
+        // Run Polars ETL
         const polarsResp = await fetch(`${FASTAPI_URL}/etl/polars`);
+        if (!polarsResp.ok) throw new Error(`Polars failed: ${polarsResp.status}`);
         const polarsData = await polarsResp.json();
-        polarsPre.textContent = JSON.stringify(polarsData.result, null, 2);
 
-        // Fetch PySpark pipeline
-        const pysparkResp = await fetch(`${FASTAPI_URL}/etl/pyspark`);
-        const pysparkData = await pysparkResp.json();
-        pysparkPre.textContent = JSON.stringify(pysparkData.result, null, 2);
+        // Run PySpark ETL
+        const sparkResp = await fetch(`${FASTAPI_URL}/etl/pyspark`);
+        if (!sparkResp.ok) throw new Error(`PySpark failed: ${sparkResp.status}`);
+        const sparkData = await sparkResp.json();
 
+        // Update UI
         statusEl.textContent = "Pipelines completed successfully.";
+
+        polarsPre.textContent = JSON.stringify(polarsData.result, null, 2);
+        pysparkPre.textContent = JSON.stringify(sparkData.result, null, 2);
+
     } catch (err) {
-        statusEl.textContent = "Error running pipelines";
+        statusEl.textContent = "Error running pipelines.";
         console.error(err);
     }
-});
+}
+
+runBtn.addEventListener("click", runPipeline);
