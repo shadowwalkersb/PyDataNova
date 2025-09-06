@@ -27,19 +27,27 @@ runBtn.addEventListener("click", async () => {
     if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
     const data = await resp.json();
 
-    // Inject sub-panels
+    // Inject sub-panels with collapse/expand
     for (const [source, result] of Object.entries(data.results)) {
       const subDiv = document.createElement("div");
       subDiv.classList.add("sub-pane");
 
-      const h3 = document.createElement("h3");
-      h3.textContent = source;
-      subDiv.appendChild(h3);
+      const header = document.createElement("div");
+      header.classList.add("sub-pane-header");
+      header.textContent = source;
+      header.style.cursor = "pointer";
 
       const pre = document.createElement("pre");
       pre.textContent = JSON.stringify(result, null, 2);
-      subDiv.appendChild(pre);
+      pre.style.display = "block"; // start expanded
 
+      // Toggle display on header click
+      header.addEventListener("click", () => {
+        pre.style.display = pre.style.display === "none" ? "block" : "none";
+      });
+
+      subDiv.appendChild(header);
+      subDiv.appendChild(pre);
       polarsPane.appendChild(subDiv);
     }
 
