@@ -1,0 +1,96 @@
+:root {
+  --bg: #f7f8fb;
+  --fg: #1f2937;
+  --muted: #6b7280;
+  --card: #ffffff;
+  --brand: #2563eb;
+  --brand-dark: #1d4ed8;
+  --code: #f3f4f6;
+  --shadow: 0 2px 8px rgba(0,0,0,0.08);
+  --radius: 14px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell,
+               Noto Sans, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+  background: var(--bg);
+  color: var(--fg);
+  margin: 24px;
+}
+
+h1 {
+  text-align: center;
+  margin: 0 0 24px;
+  font-weight: 800;
+  letter-spacing: 0.2px;
+}
+
+.panes {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+
+@media (max-width: 1100px) {
+  .panes { grid-template-columns: 1fr; }
+}
+
+.pane {
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  min-height: 420px;
+}
+
+.pane header {
+  margin-bottom: 8px;
+}
+
+.pane h2 {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.sub {
+  margin: 2px 0 0 0;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.button-stack {
+  display: flex;
+  flex-direction: column; /* vertical buttons */
+  gap: 10px;
+  margin: 12px 0 14px;
+}
+
+button {
+  appearance: none;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 12px;
+  background: var(--brand);
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  text-align: left;          /* reads like a menu item */
+}
+
+button:hover { background: var(--brand-dark); }
+
+.output {
+  background: var(--code);
+  border-radius: 10px;
+  padding: 12px;
+  margin-top: auto;          /* keeps output at bottom if tall */
+  min-height: 160px;
+  overflow: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
+}

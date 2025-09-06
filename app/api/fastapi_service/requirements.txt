@@ -12,3 +12,4 @@ pyarrow
 httpx
 prefect
 strawberry-graphql
+polars
