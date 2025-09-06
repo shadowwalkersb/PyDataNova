@@ -15,30 +15,27 @@
       <label for="sourceSelect">Source:</label>
       <select id="sourceSelect">
         <option value="csv" selected>CSV</option>
+        <option value="json">JSON</option>
+        <option value="api">REST API</option>
       </select>
 
       <label for="datasetSelect">Dataset:</label>
       <select id="datasetSelect">
-        <option value="nyc_taxi_sample" selected>Air Travel Sample (public CSV)</option>
+        <option value="airtravel_csv" selected>Air Travel Sample (CSV)</option>
         <option value="custom">Custom URL</option>
       </select>
 
-      <input id="csvUrl" type="text" placeholder="Enter CSV URL" class="hidden"/>
-
+      <input id="urlInput" type="text" placeholder="Enter dataset URL" class="hidden"/>
       <button id="runPipelineBtn">Run Pipeline</button>
     </div>
 
     <p id="status">Status: idle</p>
 
-    <!-- Two panes -->
+    <!-- Panes -->
     <div class="panes">
       <div class="pane">
         <h2>Polars ETL</h2>
-
-        <!-- Summary -->
         <div id="polars-summary"></div>
-
-        <!-- Preview table -->
         <table id="polars-table">
           <thead id="polars-thead"></thead>
           <tbody id="polars-tbody"></tbody>
