@@ -7,38 +7,21 @@ body {
 .container {
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    padding: 10px;
-    box-sizing: border-box;
+    gap: 15px;
+    padding: 15px;
     min-height: 100vh;
+    box-sizing: border-box;
 }
 
+/* Headings */
 h1, h2 {
-    margin-top: 0;
+    margin: 0;
     text-align: center;
 }
 
-/* Controls */
-.controls {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-}
-
-.controls label {
-    font-weight: bold;
-}
-
-.controls input,
-.controls select {
-    padding: 4px 8px;
-    font-size: 0.95rem;
-}
-
+/* Run button */
 #runPipelineBtn {
-    padding: 6px 12px;
+    padding: 8px 16px;
     background-color: #28a745;
     color: white;
     border: none;
@@ -46,80 +29,23 @@ h1, h2 {
     cursor: pointer;
     font-size: 1rem;
     transition: background-color 0.2s ease;
+    align-self: center;
 }
 
 #runPipelineBtn:hover {
     background-color: #218838;
 }
 
-#status {
-    text-align: center;
-    font-weight: bold;
-}
-
 /* Panes */
-.panes {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-    justify-content: center;
-}
-
 .pane {
-    flex: 1 1 45%;
     border: 1px solid #ccc;
-    border-radius: 4px;
-    padding: 8px;
-    min-height: 300px;
-    overflow: auto;
+    border-radius: 6px;
+    padding: 10px;
     background-color: #f9f9f9;
-}
-
-.pane.collapsed {
-    flex: 0 0 60px;
-    overflow: hidden;
-    background-color: #eee;
-    color: #999;
-    text-align: center;
-    box-shadow: inset -5px 0 5px -5px rgba(0,0,0,0.2);
-    transition: flex 0.3s ease, background-color 0.3s ease;
-}
-
-.pane.expanded {
-    flex: 1 1 45%;
-    overflow: auto;
-    background-color: #f9f9f9;
-    color: #000;
-}
-
-/* Hidden input */
-.hidden {
-    display: none;
-}
-
-/* Table */
-#polars-summary {
-    font-weight: bold;
-    margin-bottom: 6px;
-    text-align: center;
-}
-
-#polars-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-#polars-table th,
-#polars-table td {
-    border: 1px solid #ccc;
-    padding: 4px 6px;
-    font-size: 0.8rem;
-    text-align: left;
 }
 
 pre {
     text-align: left;
-    white-space: pre-wrap;
-    word-wrap: break-word;
-    font-size: 0.85rem;
+    overflow-x: auto;
+    max-height: 300px;
 }

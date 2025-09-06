@@ -1,41 +1,22 @@
-from fastapi import APIRouter, Query
-from typing import Optional
+from fastapi import APIRouter
 from fastapi.responses import JSONResponse
-import requests
-import io
-import pandas as pd
+from core.prefect.polars_parallel import polars_parallel
 
-from core.prefect.polars import run_polars_pipeline
 
 router = APIRouter()
-
-@router.get("/run")
-async def etl_run(
-    source: str = Query(..., description="Data source type: csv, json, api"),
-    url: Optional[str] = Query(None, description="Custom dataset URL"),
-):
+# Multi-source parallel endpoint
+@router.post("/polars/multi")
+async def etl_polars_multi(sources: dict):
     """
-    Run ETL for multiple sources: CSV, JSON, API.
-    Returns Polars ETL results (preview + summary).
+    Run multiple Polars ETL tasks in parallel.
     """
-    if not url:
-        return JSONResponse({"error": "Dataset URL required"}, status_code=400)
-
     try:
-        # For simplicity, fetch content with requests (can be large)
-        resp = requests.get(url)
-        resp.raise_for_status()
-        content = resp.content
-
-        # Determine file type
-        file_type = "csv" if source == "csv" else "json"
-
-        # Run ETL via Polars wrapper
-        result = run_polars_pipeline(file_bytes=content, file_type=file_type)
-
-        return {"result": result}
-
-    except requests.HTTPError as e:
-        return JSONResponse({"error": f"HTTP error: {e}"}, status_code=400)
+        results = polars_parallel(sources)
+        return {"results": results}
     except Exception as e:
         return JSONResponse({"error": str(e)}, status_code=500)
+
+# PySpark placeholder endpoint
+@router.get("/pyspark")
+async def etl_pyspark_placeholder():
+    return {"message": "PySpark ETL placeholder – not active in v7"}
