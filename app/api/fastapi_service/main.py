@@ -4,7 +4,7 @@ from fastapi_service.routers.users_mock import router as users_mock_router
 from fastapi_service.routers.items_mock import router as items_mock_router
 from fastapi_service.routers.users import router as users_router
 from fastapi_service.routers.items import router as items_router
-from fastapi_service.routers.etl import router as etl_router
+from fastapi_service.routers.etl_orchestration import router as etl_router
 
 app = FastAPI(title="PyDataNova FastAPI")
 
