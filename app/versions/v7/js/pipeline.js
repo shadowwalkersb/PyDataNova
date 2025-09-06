@@ -15,6 +15,53 @@ const pysparkPane = document.getElementById("pyspark-pane");
 const pysparkHeader = document.getElementById("pyspark-header");
 const pysparkPre = document.getElementById("pyspark-output");
 
+// Dataset mapping
+const DATASETS = {
+  csv: {
+    airtravel_csv: "https://people.sc.fsu.edu/~jburkardt/data/csv/airtravel.csv",
+    nyc_taxi_sample: "https://people.sc.fsu.edu/~jburkardt/data/csv/airtravel.csv", // placeholder
+    covid_csv: "https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv"
+  },
+  json: {
+    sample_json: "https://jsonplaceholder.typicode.com/posts",
+    openweather_sample: "https://api.open-meteo.com/v1/forecast?latitude=35&longitude=139&hourly=temperature_2m",
+    github_events: "https://api.github.com/events"
+  },
+  api: {
+    sample_api: "https://jsonplaceholder.typicode.com/todos",
+    spacex_launches: "https://api.spacexdata.com/v4/launches/latest",
+    iss_now: "http://api.open-notify.org/iss-now.json"
+  }
+};
+
+// Initialize datasets on load
+function populateDatasets() {
+  const src = sourceSelect.value;
+  datasetSelect.innerHTML = "";
+  for (const [key, _url] of Object.entries(DATASETS[src])) {
+    datasetSelect.innerHTML += `<option value="${key}">${key}</option>`;
+  }
+  datasetSelect.innerHTML += `<option value="custom">Custom URL</option>`;
+}
+
+populateDatasets();
+
+// Change datasets when source changes
+sourceSelect.addEventListener("change", () => {
+  populateDatasets();
+  urlInput.classList.add("hidden");
+});
+
+// Show URL input if "custom"
+datasetSelect.addEventListener("change", () => {
+  if (datasetSelect.value === "custom") {
+    urlInput.classList.remove("hidden");
+    urlInput.focus();
+  } else {
+    urlInput.classList.add("hidden");
+  }
+});
+
 // PySpark toggle
 pysparkHeader.addEventListener("click", () => {
   if (pysparkPane.classList.contains("collapsed")) {
@@ -25,35 +72,6 @@ pysparkHeader.addEventListener("click", () => {
     pysparkPane.classList.remove("expanded");
     pysparkPane.classList.add("collapsed");
     pysparkHeader.innerHTML = "PySpark ETL &#9654;";
-  }
-});
-
-// Change datasets based on source
-sourceSelect.addEventListener("change", () => {
-  datasetSelect.innerHTML = "";
-  urlInput.classList.add("hidden");
-
-  if (sourceSelect.value === "csv") {
-    datasetSelect.innerHTML = `
-      <option value="airtravel_csv" selected>Air Travel Sample (CSV)</option>
-      <option value="custom">Custom URL</option>`;
-  } else if (sourceSelect.value === "json") {
-    datasetSelect.innerHTML = `
-      <option value="sample_json" selected>Sample JSON</option>
-      <option value="custom">Custom URL</option>`;
-  } else if (sourceSelect.value === "api") {
-    datasetSelect.innerHTML = `
-      <option value="sample_api" selected>Sample API</option>
-      <option value="custom">Custom URL</option>`;
-  }
-});
-
-datasetSelect.addEventListener("change", () => {
-  if (datasetSelect.value === "custom") {
-    urlInput.classList.remove("hidden");
-    urlInput.focus();
-  } else {
-    urlInput.classList.add("hidden");
   }
 });
 
@@ -75,10 +93,7 @@ runBtn.addEventListener("click", async () => {
       return;
     }
   } else {
-    // Predefined datasets
-    if (source === "csv") url = "https://people.sc.fsu.edu/~jburkardt/data/csv/airtravel.csv";
-    else if (source === "json") url = "https://jsonplaceholder.typicode.com/posts";
-    else if (source === "api") url = "https://jsonplaceholder.typicode.com/todos";
+    url = DATASETS[source][datasetSelect.value];
   }
 
   const params = new URLSearchParams({ source, url });
