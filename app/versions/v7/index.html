@@ -2,47 +2,43 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>v7 – ETL Pipeline Orchestration</title>
+  <title>v7 – ETL Pipelines</title>
   <link rel="stylesheet" href="style.css">
   <script type="module" src="js/pipeline.js" defer></script>
 </head>
 <body>
   <div class="container">
-    <h1>v7 – ETL Pipeline Orchestration</h1>
+    <h1>v7 – ETL Pipelines (Polars & PySpark)</h1>
 
-    <!-- Controls -->
     <div class="controls">
-      <label for="sourceSelect">Source:</label>
+      <label for="sourceSelect">Source Type:</label>
       <select id="sourceSelect">
-        <option value="csv" selected>CSV</option>
+        <option value="csv">CSV</option>
         <option value="json">JSON</option>
-        <option value="api">REST API</option>
-        <option value="parquet">Parquet</option>
+        <option value="api">API</option>
       </select>
 
       <label for="datasetSelect">Dataset:</label>
-      <select id="datasetSelect"></select>
+      <select id="datasetSelect">
+        <option value="sample_csv">Sample CSV</option>
+        <option value="sample_json">Sample JSON</option>
+        <option value="custom">Custom URL</option>
+      </select>
 
-      <input id="urlInput" type="text" placeholder="Enter dataset URL" class="hidden"/>
+      <input type="text" id="csvUrl" class="hidden" placeholder="Enter custom URL" />
       <button id="runPipelineBtn">Run Pipeline</button>
     </div>
 
     <p id="status">Status: idle</p>
 
-    <!-- Panes -->
     <div class="panes">
       <div class="pane">
         <h2>Polars ETL</h2>
-        <div id="polars-summary"></div>
-        <table id="polars-table">
-          <thead id="polars-thead"></thead>
-          <tbody id="polars-tbody"></tbody>
-        </table>
+        <pre id="polars-output">Results will appear here</pre>
       </div>
-
-      <div class="pane collapsed" id="pyspark-pane">
-        <h2 id="pyspark-header">PySpark ETL &#9654;</h2>
-        <pre id="pyspark-output">Inactive / placeholder</pre>
+      <div class="pane collapsed">
+        <h2>PySpark ETL (placeholder)</h2>
+        <pre id="pyspark-output">Inactive</pre>
       </div>
     </div>
   </div>
