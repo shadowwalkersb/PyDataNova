@@ -13,3 +13,5 @@ httpx
 prefect
 strawberry-graphql
 polars
+prometheus_client
+python-json-logger

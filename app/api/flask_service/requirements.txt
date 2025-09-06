@@ -7,3 +7,5 @@ python-dotenv
 pandas
 asyncpg>=0.27
 polars
+prometheus_client
+python-json-logger
