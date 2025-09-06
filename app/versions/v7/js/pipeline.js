@@ -1,4 +1,3 @@
-// Minimal config: override via window.FASTAPI_URL if needed
 const API_BASE = window.FASTAPI_URL || "http://localhost:8000";
 
 const runBtn = document.getElementById("runPipelineBtn");
@@ -8,10 +7,12 @@ const sourceSelect = document.getElementById("sourceSelect");
 const datasetSelect = document.getElementById("datasetSelect");
 const csvUrlInput = document.getElementById("csvUrl");
 
-const polarsPre = document.getElementById("polars-output");
+const polarsSummary = document.getElementById("polars-summary");
+const polarsThead = document.getElementById("polars-thead");
+const polarsTbody = document.getElementById("polars-tbody");
 const pysparkPre = document.getElementById("pyspark-output");
 
-// Show/hide custom URL input
+// Toggle custom URL input
 datasetSelect.addEventListener("change", () => {
   if (datasetSelect.value === "custom") {
     csvUrlInput.classList.remove("hidden");
@@ -23,10 +24,11 @@ datasetSelect.addEventListener("change", () => {
 
 runBtn.addEventListener("click", async () => {
   statusEl.textContent = "Running pipeline…";
-  polarsPre.textContent = "Loading…";
+  polarsSummary.textContent = "";
+  polarsThead.innerHTML = "";
+  polarsTbody.innerHTML = "";
   pysparkPre.textContent = "Placeholder (inactive)";
 
-  // Determine CSV URL
   let csv_url = "";
   const source = sourceSelect.value;
 
@@ -43,19 +45,38 @@ runBtn.addEventListener("click", async () => {
     return;
   }
 
-  // Build query
   const params = new URLSearchParams({ source, csv_url });
 
   try {
     const resp = await fetch(`${API_BASE}/etl/polars?${params.toString()}`);
     if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
     const data = await resp.json();
+    const result = data.result ?? data;
 
-    polarsPre.textContent = JSON.stringify(data.result ?? data, null, 2);
+    // --- Summary ---
+    if (result.summary) {
+      polarsSummary.textContent = `Rows: ${result.summary.rows}`;
+    }
+
+    // --- Table ---
+    if (result.preview && result.preview.length > 0) {
+      const columns = result.columns ?? Object.keys(result.preview[0]);
+      polarsThead.innerHTML =
+        "<tr>" + columns.map(c => `<th>${c}</th>`).join("") + "</tr>";
+      polarsTbody.innerHTML = result.preview
+        .map(row =>
+          "<tr>" + columns.map(c => `<td>${row[c] ?? ""}</td>`).join("") + "</tr>"
+        )
+        .join("");
+    }
+
     statusEl.textContent = "Pipeline completed.";
   } catch (err) {
     console.error(err);
     statusEl.textContent = "Error running pipeline.";
-    polarsPre.textContent = String(err);
+    polarsSummary.textContent = "";
+    polarsThead.innerHTML = "";
+    polarsTbody.innerHTML = "";
+    pysparkPre.textContent = String(err);
   }
 });

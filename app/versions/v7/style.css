@@ -101,3 +101,23 @@ pre {
     word-wrap: break-word;
     font-size: 0.85rem;
 }
+
+/* Table */
+#polars-summary {
+    font-weight: bold;
+    margin-bottom: 6px;
+    text-align: center;
+}
+
+#polars-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#polars-table th,
+#polars-table td {
+    border: 1px solid #ccc;
+    padding: 4px 6px;
+    font-size: 0.8rem;
+    text-align: left;
+}
