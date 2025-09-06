@@ -12,9 +12,9 @@
     <button id="runPipelineBtn">Run Pipeline</button>
     <p id="status">Status: idle</p>
 
-    <div class="pane">
+    <div id="polars-pane" class="pane">
       <h2>Polars ETL</h2>
-      <pre id="polars-output">Results will appear here</pre>
+      <!-- sub-panels will be injected here -->
     </div>
 
     <div class="pane">
@@ -22,5 +22,6 @@
       <pre id="pyspark-output">Inactive</pre>
     </div>
   </div>
+
 </body>
 </html>
