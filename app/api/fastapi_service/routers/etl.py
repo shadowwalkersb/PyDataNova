@@ -1,24 +1,38 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Query
+from typing import Optional
+from fastapi.responses import JSONResponse
 
-from core.prefect.polars import polars
-# from core.prefect.pyspark import pyspark
+from core.prefect.polars import run_polars_pipeline
 
 router = APIRouter()
 
-# @router.get("/polars")
-# async def run_polars_pipeline():
-#     # placeholder result, will hook Prefect later
-#     return {"result": [{"col1": 1, "col2": "A"}, {"col1": 2, "col2": "B"}]}
-
-@router.get("/pyspark")
-async def run_pyspark_pipeline():
-    # placeholder result, will hook Prefect later
-    return {"result": [{"col1": 10, "col2": "X"}, {"col1": 20, "col2": "Y"}]}
 
 @router.get("/polars")
-async def run_polars_pipeline():
-    return {"result": polars()}
+async def etl_polars(
+    source: str = Query(..., description="Data source type, e.g., csv"),
+    dataset: Optional[str] = Query(None, description="Predefined dataset name"),
+    csv_url: Optional[str] = Query(None, description="Custom CSV URL"),
+):
+    """
+    Run the Polars ETL pipeline.
+    Currently supports: CSV source.
+    """
+    if source == "csv":
+        if dataset == "nyc_taxi_sample":
+            # local or bundled file
+            file_path = "data/nyc_taxi_sample.csv"
+            result = run_polars_pipeline(file_path=file_path)
+        elif dataset == "custom" and csv_url:
+            # fetch directly from provided URL
+            result = run_polars_pipeline(file_url=csv_url)
+        else:
+            return JSONResponse(
+                {"error": "Invalid dataset or missing CSV URL"},
+                status_code=400,
+            )
+        return {"result": result}
 
-# @router.get("/pyspark")
-# async def run_pyspark_pipeline():
-#     return {"result": pyspark()}
+    return JSONResponse(
+        {"error": f"Source '{source}' not implemented"},
+        status_code=400,
+    )

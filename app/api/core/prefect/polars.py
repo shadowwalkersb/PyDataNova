@@ -1,23 +1,32 @@
-from prefect import flow, task
 import polars as pl
+import io
+import requests
 
-@task
-def extract():
-    return pl.DataFrame({
-        "id": [1, 2, 3],
-        "value": ["A", "B", "C"]
-    })
 
-@task
-def transform(df: pl.DataFrame):
-    return df.with_columns((pl.col("id") * 10).alias("id_x10"))
+def run_polars_pipeline(file_path: str = None, file_url: str = None):
+    """
+    Simple ETL using Polars.
+    - Load CSV (local path or remote URL)
+    - Transform (basic ops for now)
+    - Return preview
+    """
+    try:
+        if file_url:
+            resp = requests.get(file_url)
+            resp.raise_for_status()
+            df = pl.read_csv(io.BytesIO(resp.content))
+        elif file_path:
+            df = pl.read_csv(file_path)
+        else:
+            return {"error": "No CSV source provided"}
 
-@task
-def load(df: pl.DataFrame):
-    return df.to_dicts()
+        # --- Transform step (basic example) ---
+        preview = df.head(10).to_dicts()
 
-@flow(name="Polars ETL")
-def polars():
-    raw = extract()
-    transformed = transform(raw)
-    return load(transformed)
+        return {
+            "rows": len(df),
+            "columns": df.columns,
+            "preview": preview,
+        }
+    except Exception as e:
+        return {"error": str(e)}
