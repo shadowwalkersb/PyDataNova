@@ -1,66 +1,125 @@
 body {
-  font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 0;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
 }
 
 .container {
-  padding: 20px;
-  box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px;
+    box-sizing: border-box;
+    min-height: 100vh;
 }
 
 h1, h2 {
-  text-align: center;
-  margin-top: 0;
+    margin-top: 0;
+    text-align: center;
 }
 
+/* Controls */
 .controls {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 10px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
 }
 
-.controls select, .controls input, .controls button {
-  padding: 6px 12px;
-  font-size: 1rem;
+.controls label {
+    font-weight: bold;
 }
 
-button#runPipelineBtn {
-  background-color: #28a745;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
+.controls input,
+.controls select {
+    padding: 4px 8px;
+    font-size: 0.95rem;
 }
 
-button#runPipelineBtn:hover {
-  background-color: #218838;
+#runPipelineBtn {
+    padding: 6px 12px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.2s ease;
 }
 
-.hidden {
-  display: none;
+#runPipelineBtn:hover {
+    background-color: #218838;
 }
 
+#status {
+    text-align: center;
+    font-weight: bold;
+}
+
+/* Panes */
 .panes {
-  display: flex;
-  gap: 10px;
-  justify-content: center;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
 .pane {
-  flex: 1;
-  border: 1px solid #ccc;
-  padding: 10px;
-  min-width: 300px;
-  max-height: 500px;
-  overflow: auto;
+    flex: 1 1 45%;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 8px;
+    min-height: 300px;
+    overflow: auto;
+    background-color: #f9f9f9;
 }
 
 .pane.collapsed {
-  flex: 0.2;
-  opacity: 0.3;
+    flex: 0 0 60px;
+    overflow: hidden;
+    background-color: #eee;
+    color: #999;
+    text-align: center;
+    box-shadow: inset -5px 0 5px -5px rgba(0,0,0,0.2);
+    transition: flex 0.3s ease, background-color 0.3s ease;
+}
+
+.pane.expanded {
+    flex: 1 1 45%;
+    overflow: auto;
+    background-color: #f9f9f9;
+    color: #000;
+}
+
+/* Hidden input */
+.hidden {
+    display: none;
+}
+
+/* Table */
+#polars-summary {
+    font-weight: bold;
+    margin-bottom: 6px;
+    text-align: center;
+}
+
+#polars-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#polars-table th,
+#polars-table td {
+    border: 1px solid #ccc;
+    padding: 4px 6px;
+    font-size: 0.8rem;
+    text-align: left;
+}
+
+pre {
+    text-align: left;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    font-size: 0.85rem;
 }
