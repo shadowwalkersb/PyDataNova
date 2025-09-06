@@ -25,40 +25,39 @@ def index():
 # Analytics endpoint
 @app.route("/analytics/summary")
 def analytics_summary():
-    # Dummy summary data
     summary = {
-        "mean": 42.0,
-        "std": 3.14,
-        "count": 100
+        "users": 123,
+        "events": 456,
+        "sales": 789
     }
     return jsonify(summary)
 
 # ML predict endpoint
 @app.route("/ml/predict", methods=["POST", "GET"])
 def ml_predict():
-    # Dummy prediction
-    input_text = request.args.get("inputText", "default") if request.method == "GET" else request.json.get("inputText", "default")
-    result = {
+    if request.method == "GET":
+        input_text = request.args.get("inputText", "default")
+    else:
+        input_text = request.json.get("inputText", "default")
+
+    prediction = "cat" if "cat" in input_text.lower() else "other"
+    confidence = 0.95 if prediction == "cat" else 0.67
+
+    return jsonify({
         "input": input_text,
-        "prediction": "cat",
-        "confidence": 0.95
-    }
-    return jsonify(result)
+        "prediction": prediction,
+        "confidence": confidence
+    })
 
 # RPC-style echo endpoint
 @app.route("/rpc/echo", methods=["POST", "GET"])
 def rpc_echo():
-    data = request.get_json() or {"message": "hello"}
-    return jsonify(data)
-
-# Image endpoints
-@app.route("/image/face-detect")
-def face_detect():
-    return jsonify({"faces_detected": 2})
-
-@app.route("/image/enhance")
-def enhance():
-    return jsonify({"status": "success", "message": "image enhanced"})
+    if request.method == "GET":
+        msg = request.args.get("msg", "hello")
+    else:
+        data = request.get_json() or {}
+        msg = data.get("msg", "hello")
+    return jsonify({"echo": msg})
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
