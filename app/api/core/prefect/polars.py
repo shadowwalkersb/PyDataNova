@@ -2,31 +2,28 @@ import polars as pl
 import io
 import requests
 
-
-def run_polars_pipeline(file_path: str = None, file_url: str = None):
-    """
-    Simple ETL using Polars.
-    - Load CSV (local path or remote URL)
-    - Transform (basic ops for now)
-    - Return preview
-    """
+def run_polars_pipeline(file_url: str):
     try:
-        if file_url:
-            resp = requests.get(file_url)
-            resp.raise_for_status()
-            df = pl.read_csv(io.BytesIO(resp.content))
-        elif file_path:
-            df = pl.read_csv(file_path)
+        resp = requests.get(file_url)
+        resp.raise_for_status()
+        df = pl.read_csv(io.BytesIO(resp.content))
+
+        # Only do transformations if expected columns exist
+        cols = df.columns
+        if "pickup_datetime" in cols and "dropoff_datetime" in cols:
+            df = df.with_columns([
+                (pl.col("dropoff_datetime").str.strptime(pl.Datetime) -
+                 pl.col("pickup_datetime").str.strptime(pl.Datetime))
+                .dt.cast(pl.Int64)  # seconds
+                .alias("trip_duration_sec")
+            ])
         else:
-            return {"error": "No CSV source provided"}
+            # Skip trip_duration calculation
+            pass
 
-        # --- Transform step (basic example) ---
         preview = df.head(10).to_dicts()
+        summary = {"rows": df.height}
 
-        return {
-            "rows": len(df),
-            "columns": df.columns,
-            "preview": preview,
-        }
+        return {"columns": df.columns, "preview": preview, "summary": summary}
     except Exception as e:
         return {"error": str(e)}

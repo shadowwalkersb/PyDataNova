@@ -1,4 +1,4 @@
-// Minimal config: override via window.FASTAPI_URL if you need a different host/port
+// Minimal config: override via window.FASTAPI_URL if needed
 const API_BASE = window.FASTAPI_URL || "http://localhost:8000";
 
 const runBtn = document.getElementById("runPipelineBtn");
@@ -11,7 +11,7 @@ const csvUrlInput = document.getElementById("csvUrl");
 const polarsPre = document.getElementById("polars-output");
 const pysparkPre = document.getElementById("pyspark-output");
 
-// Toggle custom URL field
+// Show/hide custom URL input
 datasetSelect.addEventListener("change", () => {
   if (datasetSelect.value === "custom") {
     csvUrlInput.classList.remove("hidden");
@@ -22,24 +22,29 @@ datasetSelect.addEventListener("change", () => {
 });
 
 runBtn.addEventListener("click", async () => {
-  statusEl.textContent = "Running pipeline...";
+  statusEl.textContent = "Running pipeline…";
   polarsPre.textContent = "Loading…";
+  pysparkPre.textContent = "Placeholder (inactive)";
 
-  // Build query params
-  const source = sourceSelect.value; // currently only "csv"
-  const dataset = datasetSelect.value;
+  // Determine CSV URL
+  let csv_url = "";
+  const source = sourceSelect.value;
 
-  const params = new URLSearchParams({ source });
-  if (dataset === "custom") {
-    const url = csvUrlInput.value.trim();
-    if (!url) {
+  if (datasetSelect.value === "custom") {
+    csv_url = csvUrlInput.value.trim();
+    if (!csv_url) {
       statusEl.textContent = "Please provide a CSV URL.";
       return;
     }
-    params.set("csv_url", url);
+  } else if (datasetSelect.value === "nyc_taxi_sample") {
+    csv_url = "https://people.sc.fsu.edu/~jburkardt/data/csv/airtravel.csv";
   } else {
-    params.set("dataset", dataset); // e.g., "nyc_taxi_sample"
+    statusEl.textContent = "Unknown dataset selected.";
+    return;
   }
+
+  // Build query
+  const params = new URLSearchParams({ source, csv_url });
 
   try {
     const resp = await fetch(`${API_BASE}/etl/polars?${params.toString()}`);
@@ -48,8 +53,6 @@ runBtn.addEventListener("click", async () => {
 
     polarsPre.textContent = JSON.stringify(data.result ?? data, null, 2);
     statusEl.textContent = "Pipeline completed.";
-    // PySpark stays collapsed/inactive
-    pysparkPre.textContent = "Placeholder (inactive)";
   } catch (err) {
     console.error(err);
     statusEl.textContent = "Error running pipeline.";
