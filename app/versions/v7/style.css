@@ -87,6 +87,14 @@ h1, h2 {
     color: #999;
     text-align: center;
     box-shadow: inset -5px 0 5px -5px rgba(0,0,0,0.2);
+    transition: flex 0.3s ease, background-color 0.3s ease;
+}
+
+.pane.expanded {
+    flex: 1 1 45%;
+    overflow: auto;
+    background-color: #f9f9f9;
+    color: #000;
 }
 
 /* Hidden input field */

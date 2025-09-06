@@ -80,3 +80,18 @@ runBtn.addEventListener("click", async () => {
     pysparkPre.textContent = String(err);
   }
 });
+
+const pysparkPane = document.getElementById("pyspark-pane");
+const pysparkHeader = document.getElementById("pyspark-header");
+
+pysparkHeader.addEventListener("click", () => {
+  if (pysparkPane.classList.contains("collapsed")) {
+    pysparkPane.classList.remove("collapsed");
+    pysparkPane.classList.add("expanded");
+    pysparkHeader.innerHTML = "PySpark ETL &#9660;"; // down arrow
+  } else {
+    pysparkPane.classList.remove("expanded");
+    pysparkPane.classList.add("collapsed");
+    pysparkHeader.innerHTML = "PySpark ETL &#9654;"; // right arrow
+  }
+});
