@@ -131,3 +131,10 @@ class Query:
 schema = strawberry.Schema(query=Query)
 graphql_app = GraphQLRouter(schema)
 app.include_router(graphql_app, prefix="/graphql")
+
+from prometheus_client import generate_latest, CONTENT_TYPE_LATEST
+from fastapi import Response
+
+@app.get("/metrics")
+def metrics():
+    return Response(generate_latest(), media_type=CONTENT_TYPE_LATEST)

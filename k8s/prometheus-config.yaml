@@ -9,11 +9,17 @@ data:
       scrape_interval: 15s
     scrape_configs:
       - job_name: 'fastapi'
+        metrics_path: /metrics
         static_configs:
           - targets: ['fastapi:8000']
       - job_name: 'flask'
+        metrics_path: /metrics
         static_configs:
           - targets: ['flask:5000']
+      - job_name: 'pipeline'
+        static_configs:
+          - targets: ['pipeline:8000']
       - job_name: 'frontend'
+        metrics_path: /metrics
         static_configs:
           - targets: ['frontend:80']

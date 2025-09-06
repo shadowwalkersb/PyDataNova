@@ -22,3 +22,8 @@ k8s_yaml('k8s/prometheus-deployment.yaml')
 k8s_yaml('k8s/namespace-monitoring.yaml')
 # Grafana
 k8s_yaml('k8s/grafana.yaml')
+
+# Optional: watch files so Tilt auto-applies changes
+watch_file("k8s/prometheus-config.yaml")
+watch_file("k8s/prometheus-deployment.yaml")
+watch_file("k8s/grafana.yaml")

@@ -1,3 +1,79 @@
+# Grafana datasource (as before)
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-datasource
+  namespace: monitoring
+  labels:
+    grafana_datasource: "1"
+data:
+  prometheus.yaml: |
+    apiVersion: 1
+    datasources:
+      - name: Prometheus
+        type: prometheus
+        access: proxy
+        url: http://prometheus:9090
+        isDefault: true
+        editable: true
+
+---
+
+# Grafana dashboard provisioning
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-dashboard-provider
+  namespace: monitoring
+data:
+  dashboards.yaml: |
+    apiVersion: 1
+    providers:
+      - name: 'default'
+        orgId: 1
+        folder: ''
+        type: file
+        options:
+          path: /var/lib/grafana/dashboards
+
+---
+
+# Grafana dashboards
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-dashboards
+  namespace: monitoring
+  labels:
+    grafana_dashboard: "1"
+data:
+  sample-dashboard.json: |
+    {
+      "id": null,
+      "title": "API Metrics",
+      "panels": [
+        {
+          "type": "graph",
+          "title": "FastAPI Up",
+          "targets": [
+            { "expr": "up{job='fastapi'}", "legendFormat": "FastAPI Up" }
+          ]
+        },
+        {
+          "type": "graph",
+          "title": "Flask Up",
+          "targets": [
+            { "expr": "up{job='flask'}", "legendFormat": "Flask Up" }
+          ]
+        }
+      ],
+      "schemaVersion": 30,
+      "version": 1
+    }
+
+---
+
+# Grafana Deployment
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -18,10 +94,38 @@ spec:
           image: grafana/grafana:latest
           env:
             - name: GF_SECURITY_ADMIN_PASSWORD
-              value: "admin"        # default password
+              value: "admin"
+            - name: GF_DASHBOARDS_JSON_ENABLED
+              value: "true"
+            - name: GF_DASHBOARDS_JSON_PATH
+              value: /var/lib/grafana/dashboards
+            - name: GF_PROVISIONING_DS_PATH
+              value: /etc/grafana/provisioning/datasources
+            - name: GF_PROVISIONING_DASHBOARDS_PATH
+              value: /etc/grafana/provisioning/dashboards
           ports:
             - containerPort: 3000
+          volumeMounts:
+            - name: dashboards
+              mountPath: /var/lib/grafana/dashboards
+            - name: datasource
+              mountPath: /etc/grafana/provisioning/datasources
+            - name: dashboard-provider
+              mountPath: /etc/grafana/provisioning/dashboards
+      volumes:
+        - name: dashboards
+          configMap:
+            name: grafana-dashboards
+        - name: datasource
+          configMap:
+            name: grafana-datasource
+        - name: dashboard-provider
+          configMap:
+            name: grafana-dashboard-provider
+
 ---
+
+# Grafana Service
 apiVersion: v1
 kind: Service
 metadata:
