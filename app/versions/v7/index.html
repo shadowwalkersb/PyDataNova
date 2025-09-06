@@ -4,28 +4,49 @@
   <meta charset="UTF-8">
   <title>v7 – Orchestrated ETL Pipelines</title>
   <link rel="stylesheet" href="style.css">
+  <script type="module" src="js/pipeline.js" defer></script>
 </head>
 <body>
   <div class="container">
     <h1>v7 – Orchestrated ETL Pipelines</h1>
 
-    <button id="runPipelineBtn">Run Pipelines</button>
-    <p id="status">Status: idle</p>
+    <!-- Controls -->
+    <div class="controls">
+      <label>
+        Source
+        <select id="sourceSelect">
+          <option value="csv" selected>CSV</option>
+          <!-- more to come later -->
+        </select>
+      </label>
 
+      <label>
+        Dataset
+        <select id="datasetSelect">
+          <option value="nyc_taxi_sample" selected>NYC Taxi sample (CSV)</option>
+          <option value="custom">Custom CSV URL…</option>
+        </select>
+      </label>
+
+      <input id="csvUrl" class="hidden" type="url" placeholder="https://example.com/data.csv" />
+
+      <button id="runPipelineBtn">Run Pipeline</button>
+      <span id="status">Status: idle</span>
+    </div>
+
+    <!-- Panes -->
     <div class="panes">
       <section class="pane" id="polars-pane">
         <h2>Polars Pipeline</h2>
-        <pre id="polars-output">Loading...</pre>
+        <pre id="polars-output">Ready…</pre>
       </section>
 
-      <section class="pane" id="pyspark-pane">
-        <h2>PySpark Pipeline</h2>
-        <pre id="pyspark-output">Loading...</pre>
+      <section class="pane collapsed" id="pyspark-pane">
+        <h2>PySpark (placeholder)</h2>
+        <pre id="pyspark-output">Collapsed (inactive)</pre>
       </section>
     </div>
 
   </div>
-
-  <script type="module" src="js/pipeline.js"></script>
 </body>
 </html>

@@ -1,36 +1,58 @@
-import { FASTAPI_URL } from "../../../js/config.js";
+// Minimal config: override via window.FASTAPI_URL if you need a different host/port
+const API_BASE = window.FASTAPI_URL || "http://localhost:8000";
 
 const runBtn = document.getElementById("runPipelineBtn");
 const statusEl = document.getElementById("status");
+
+const sourceSelect = document.getElementById("sourceSelect");
+const datasetSelect = document.getElementById("datasetSelect");
+const csvUrlInput = document.getElementById("csvUrl");
+
 const polarsPre = document.getElementById("polars-output");
 const pysparkPre = document.getElementById("pyspark-output");
 
-async function runPipeline() {
-    statusEl.textContent = "Running pipelines...";
-    polarsPre.textContent = "Loading...";
-    pysparkPre.textContent = "Loading...";
+// Toggle custom URL field
+datasetSelect.addEventListener("change", () => {
+  if (datasetSelect.value === "custom") {
+    csvUrlInput.classList.remove("hidden");
+    csvUrlInput.focus();
+  } else {
+    csvUrlInput.classList.add("hidden");
+  }
+});
 
-    try {
-        // Run Polars ETL
-        const polarsResp = await fetch(`${FASTAPI_URL}/etl/polars`);
-        if (!polarsResp.ok) throw new Error(`Polars failed: ${polarsResp.status}`);
-        const polarsData = await polarsResp.json();
+runBtn.addEventListener("click", async () => {
+  statusEl.textContent = "Running pipeline...";
+  polarsPre.textContent = "Loading…";
 
-        // Run PySpark ETL
-        const sparkResp = await fetch(`${FASTAPI_URL}/etl/pyspark`);
-        if (!sparkResp.ok) throw new Error(`PySpark failed: ${sparkResp.status}`);
-        const sparkData = await sparkResp.json();
+  // Build query params
+  const source = sourceSelect.value; // currently only "csv"
+  const dataset = datasetSelect.value;
 
-        // Update UI
-        statusEl.textContent = "Pipelines completed successfully.";
-
-        polarsPre.textContent = JSON.stringify(polarsData.result, null, 2);
-        pysparkPre.textContent = JSON.stringify(sparkData.result, null, 2);
-
-    } catch (err) {
-        statusEl.textContent = "Error running pipelines.";
-        console.error(err);
+  const params = new URLSearchParams({ source });
+  if (dataset === "custom") {
+    const url = csvUrlInput.value.trim();
+    if (!url) {
+      statusEl.textContent = "Please provide a CSV URL.";
+      return;
     }
-}
+    params.set("csv_url", url);
+  } else {
+    params.set("dataset", dataset); // e.g., "nyc_taxi_sample"
+  }
 
-runBtn.addEventListener("click", runPipeline);
+  try {
+    const resp = await fetch(`${API_BASE}/etl/polars?${params.toString()}`);
+    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+    const data = await resp.json();
+
+    polarsPre.textContent = JSON.stringify(data.result ?? data, null, 2);
+    statusEl.textContent = "Pipeline completed.";
+    // PySpark stays collapsed/inactive
+    pysparkPre.textContent = "Placeholder (inactive)";
+  } catch (err) {
+    console.error(err);
+    statusEl.textContent = "Error running pipeline.";
+    polarsPre.textContent = String(err);
+  }
+});
