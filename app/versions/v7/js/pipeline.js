@@ -14,15 +14,18 @@ async function runPipeline() {
         const polarsResp = await fetch(`${FASTAPI_URL}/etl/polars`);
         if (!polarsResp.ok) throw new Error(`Polars failed: ${polarsResp.status}`);
         const polarsData = await polarsResp.json();
-        polarsPre.textContent = JSON.stringify(polarsData.result, null, 2);
 
         const pysparkResp = await fetch(`${FASTAPI_URL}/etl/pyspark`);
         if (!pysparkResp.ok) throw new Error(`PySpark failed: ${pysparkResp.status}`);
         const pysparkData = await pysparkResp.json();
+
+        polarsPre.textContent = JSON.stringify(polarsData.result, null, 2);
         pysparkPre.textContent = JSON.stringify(pysparkData.result, null, 2);
 
         statusEl.textContent = "Pipelines completed successfully.";
     } catch (err) {
+        polarsPre.textContent = String(err);
+        pysparkPre.textContent = String(err);
         statusEl.textContent = "Error running pipelines.";
         console.error(err);
     }
