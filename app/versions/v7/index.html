@@ -11,21 +11,16 @@
     <h1>v7 – ETL Pipeline Orchestration</h1>
 
     <div class="controls">
-      <label>
-        Source
-        <select id="sourceSelect">
-          <option value="csv" selected>CSV</option>
-          <!-- more to come later -->
-        </select>
-      </label>
+      <label for="sourceSelect">Source:</label>
+      <select id="sourceSelect">
+        <option value="csv" selected>CSV</option>
+      </select>
 
-      <label>
-        Dataset
-        <select id="datasetSelect">
-          <option value="nyc_taxi_sample" selected>NYC Taxi sample (CSV)</option>
-          <option value="custom">Custom CSV URL…</option>
-        </select>
-      </label>
+      <label for="datasetSelect">Dataset:</label>
+      <select id="datasetSelect">
+        <option value="nyc_taxi_sample" selected>Air Travel Sample (public CSV)</option>
+        <option value="custom">Custom URL</option>
+      </select>
 
       <button id="runPipelineBtn">Run Pipeline</button>
       <span id="status">Status: idle</span>
