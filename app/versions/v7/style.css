@@ -72,6 +72,14 @@ h1, h2 {
     flex: 3;
 }
 
+/* Collapsed PySpark hint */
+#pyspark-pane.collapsed {
+    flex: 0.25;
+    background: #f3f3f3;
+    box-shadow: -4px 0 8px rgba(0, 0, 0, 0.15);
+    opacity: 0.8;
+}
+
 /* Preformatted output */
 pre {
     white-space: pre-wrap;
