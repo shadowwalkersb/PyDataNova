@@ -5,7 +5,7 @@ const statusEl = document.getElementById("status");
 const polarsPre = document.getElementById("polars-output");
 const pysparkPre = document.getElementById("pyspark-output");
 
-runBtn.addEventListener("click", async () => {
+async function runPipeline() {
     statusEl.textContent = "Running pipelines...";
     polarsPre.textContent = "Loading...";
     pysparkPre.textContent = "Loading...";
@@ -26,4 +26,6 @@ runBtn.addEventListener("click", async () => {
         statusEl.textContent = "Error running pipelines.";
         console.error(err);
     }
-});
+}
+
+runBtn.addEventListener("click", runPipeline);
