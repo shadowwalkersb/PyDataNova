@@ -3,6 +3,7 @@ import { FASTAPI_URL } from "../../../js/config.js";
 const runBtn = document.getElementById("runPipelineBtn");
 const sourceSelect = document.getElementById("sourceSelect");
 const datasetSelect = document.getElementById("datasetSelect");
+const urlInput = document.getElementById("url");
 const statusEl = document.getElementById("status");
 const polarsPre = document.getElementById("polars-output");
 const pysparkPre = document.getElementById("pyspark-output");
@@ -65,5 +66,6 @@ runBtn.addEventListener("click", runPipeline);
 // Toggle custom URL field
 datasetSelect.addEventListener("change", () => {
   if (datasetSelect.value === "custom") {
+    urlInput.focus();
   }
 });
