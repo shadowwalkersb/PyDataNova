@@ -67,6 +67,11 @@ h1, h2 {
     transition: all 0.35s ease;
 }
 
+/* Emphasize Polars by giving it more space */
+#polars-pane {
+    flex: 3;
+}
+
 /* Preformatted output */
 pre {
     white-space: pre-wrap;
