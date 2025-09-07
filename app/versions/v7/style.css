@@ -37,6 +37,15 @@ h1, h2 {
     background-color: #218838;
 }
 
+/* Controls */
+.controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+}
+
 /* Status text */
 #status {
     text-align: center;
