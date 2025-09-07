@@ -45,6 +45,19 @@ h1, h2 {
     justify-content: center;
 }
 
+.controls label {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+}
+
+.controls select,
+.controls input[type="url"] {
+    padding: 6px 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
 /* Status text */
 #status {
     font-weight: bold;
