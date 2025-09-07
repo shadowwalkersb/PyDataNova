@@ -5,10 +5,20 @@ const statusEl = document.getElementById("status");
 const polarsPre = document.getElementById("polars-output");
 const pysparkPre = document.getElementById("pyspark-output");
 
+const polarsSummary = document.getElementById("polars-summary");
+const polarsThead = document.getElementById("polars-thead");
+const polarsTbody = document.getElementById("polars-tbody");
+
+const pysparkPane = document.getElementById("pyspark-pane");
+const pysparkHeader = document.getElementById("pyspark-header");
+const polarsPane = document.getElementById("polars-pane");
+
 async function runPipeline() {
     statusEl.textContent = "Running pipelines...";
     polarsPre.textContent = "Loading...";
     pysparkPre.textContent = "Loading...";
+    polarsThead.innerHTML = "";
+    polarsTbody.innerHTML = "";
 
     try {
         const polarsResp = await fetch(`${FASTAPI_URL}/etl/polars`);
@@ -22,9 +32,26 @@ async function runPipeline() {
         polarsPre.textContent = JSON.stringify(polarsData.result, null, 2);
         pysparkPre.textContent = JSON.stringify(pysparkData.result, null, 2);
 
+        const result = polarsData.result;
+        polarsSummary.textContent = `Rows: ${result.summary.rows}`;
+
+        if (result.preview && result.preview.length > 0) {
+        const columns = result.columns ?? Object.keys(result.preview[0]);
+        polarsThead.innerHTML =
+            "<tr>" + columns.map(c => `<th>${c}</th>`).join("") + "</tr>";
+        polarsTbody.innerHTML = result.preview
+            .map(row =>
+            "<tr>" + columns.map(c => `<td>${row[c] ?? ""}</td>`).join("") + "</tr>"
+            )
+            .join("");
+        }
+
         statusEl.textContent = "Pipelines completed successfully.";
     } catch (err) {
         polarsPre.textContent = String(err);
+        polarsSummary.textContent = "";
+        polarsThead.innerHTML = "";
+        polarsTbody.innerHTML = "";
         pysparkPre.textContent = String(err);
         statusEl.textContent = "Error running pipelines.";
         console.error(err);
