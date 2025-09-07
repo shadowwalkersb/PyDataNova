@@ -37,6 +37,12 @@ h1, h2 {
     background-color: #218838;
 }
 
+/* Status text */
+#status {
+    text-align: center;
+    font-weight: bold;
+}
+
 /* Panes layout */
 .panes {
     display: flex;
