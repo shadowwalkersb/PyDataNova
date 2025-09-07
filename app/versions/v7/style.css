@@ -46,62 +46,61 @@ h1, h2 {
 }
 
 .controls label {
-    display: flex;
-    gap: 6px;
-    align-items: center;
+    font-weight: bold;
 }
 
-.controls select,
-.controls input[type="url"] {
-    padding: 6px 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
-
-.hidden {
-    display: none;
+.controls input,
+.controls select {
+    padding: 4px 8px;
+    font-size: 0.95rem;
 }
 
 /* Status text */
 #status {
+    text-align: center;
     font-weight: bold;
 }
 
 /* Panes layout */
 .panes {
     display: flex;
-    gap: 16px;
-    height: 70vh;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
 .pane {
-    flex: 1;
+    flex: 1 1 45%;
     border: 1px solid #ccc;
-    padding: 10px;
-    background: #f9f9f9;
-    border-radius: 8px;
+    padding: 8px;
+    border-radius: 4px;
+    min-height: 300px;
     overflow: auto;
-    transition: all 0.35s ease;
+    background-color: #f9f9f9;
 }
 
-/* Emphasize Polars by giving it more space */
-#polars-pane {
-    flex: 3;
+/* Collapsed / shadow effect for PySpark */
+.pane.collapsed {
+    flex: 0 0 60px;
+    height: auto;
+    overflow: hidden;
+    background-color: #eee;
+    color: #999;
+    text-align: center;
+    box-shadow: inset -5px 0 5px -5px rgba(0,0,0,0.2);
 }
 
-/* Collapsed PySpark hint */
-#pyspark-pane.collapsed {
-    flex: 0.25;
-    background: #f3f3f3;
-    box-shadow: -4px 0 8px rgba(0, 0, 0, 0.15);
-    opacity: 0.8;
+/* Hidden input field */
+.hidden {
+    display: none;
 }
 
 /* Preformatted output */
 pre {
+    text-align: left;
     white-space: pre-wrap;
     word-wrap: break-word;
-    margin: 0;
+    font-size: 0.85rem;
 }
 
 /* Table */
