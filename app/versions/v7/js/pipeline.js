@@ -1,4 +1,5 @@
 import { FASTAPI_URL } from "../../../js/config.js";
+import { fetchAndDisplay } from "../../../js/helpers.js";
 
 const runBtn = document.getElementById("runPipelineBtn");
 const sourceSelect = document.getElementById("sourceSelect");
