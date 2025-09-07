@@ -53,8 +53,8 @@ h1, h2 {
 /* Panes layout */
 .panes {
     display: flex;
-    gap: 20px;
-    justify-content: space-around;
+    gap: 16px;
+    height: 70vh;
 }
 
 .pane {
