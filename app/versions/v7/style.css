@@ -68,3 +68,10 @@ h1, h2 {
     overflow-x: auto;
     max-height: 60vh;
 }
+
+/* Preformatted output */
+pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    margin: 0;
+}
