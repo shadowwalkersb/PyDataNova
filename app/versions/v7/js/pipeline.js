@@ -31,8 +31,8 @@ async function runPipeline() {
         if (!pysparkResp.ok) throw new Error(`PySpark failed: ${pysparkResp.status}`);
         const pysparkData = await pysparkResp.json();
 
-        polarsPre.textContent = JSON.stringify(polarsData.result, null, 2);
-        pysparkPre.textContent = JSON.stringify(pysparkData.result, null, 2);
+        polarsPre.textContent = JSON.stringify(polarsData.result ?? polarsData, null, 2);
+        pysparkPre.textContent = JSON.stringify(pysparkData.result ?? pysparkData, null, 2);
 
         const result = polarsData.result;
         polarsSummary.textContent = `Rows: ${result.summary.rows}`;
