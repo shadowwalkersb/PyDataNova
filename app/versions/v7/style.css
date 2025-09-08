@@ -15,7 +15,7 @@ body {
 }
 
 /* Headings */
-h1, h2 {
+h1, h2, h3 {
     margin: 0;
     text-align: center;
 }
@@ -43,6 +43,14 @@ h1, h2 {
     border-radius: 6px;
     padding: 10px;
     background-color: #f9f9f9;
+}
+
+.sub-pane {
+    border: 1px dashed #aaa;
+    border-radius: 4px;
+    margin: 10px 0;
+    padding: 8px;
+    background-color: #fff;
 }
 
 pre {

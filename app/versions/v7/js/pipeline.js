@@ -103,10 +103,10 @@ datasetSelect.addEventListener("change", () => {
 
 const pysparkPane = document.getElementById("pyspark-pane");
 const pysparkHeader = document.getElementById("pyspark-header");
-const pysparkPre = document.getElementById("pyspark-output");
+const polarsPane = document.getElementById("polars-pane");
 
 const MULTI_SOURCES = {
-  taxi_csv: ["https://raw.githubusercontent.com/ageron/handson-ml2/master/datasets/iris/iris.csv", "csv"],
+  taxi_csv: ["https://people.sc.fsu.edu/~jburkardt/data/csv/airtravel.csv", "csv"],
   users_json: ["https://raw.githubusercontent.com/veekun/titanic-parquet/main/titanic.json", "json"]
 };
 
@@ -118,7 +118,9 @@ datasetSelect.addEventListener("change", () => {
     urlInput.classList.add("hidden");
   }
   statusEl.textContent = "Status: Running multiple pipelines…";
-  polarsPre.textContent = "Loading…";
+
+  // Clear old sub-panels
+  polarsPane.querySelectorAll(".sub-pane").forEach(el => el.remove());
   pysparkPre.textContent = "Inactive";
 
   try {
@@ -129,11 +131,26 @@ datasetSelect.addEventListener("change", () => {
     });
     if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
     const data = await resp.json();
-    polarsPre.textContent = JSON.stringify(data.results, null, 2);
+
+    // Inject sub-panels
+    for (const [source, result] of Object.entries(data.results)) {
+      const subDiv = document.createElement("div");
+      subDiv.classList.add("sub-pane");
+
+      const h3 = document.createElement("h3");
+      h3.textContent = source;
+      subDiv.appendChild(h3);
+
+      const pre = document.createElement("pre");
+      pre.textContent = JSON.stringify(result, null, 2);
+      subDiv.appendChild(pre);
+
+      polarsPane.appendChild(subDiv);
+    }
+
     statusEl.textContent = "Status: All pipelines completed.";
   } catch (err) {
     console.error(err);
-    polarsPre.textContent = String(err);
     statusEl.textContent = "Status: Error running pipelines.";
   }
 });
