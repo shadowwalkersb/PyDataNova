@@ -23,6 +23,21 @@ async function runPipeline() {
     polarsThead.innerHTML = "";
     polarsTbody.innerHTML = "";
 
+    const source = sourceSelect.value;
+    const dataset = datasetSelect.value;
+    const params = new URLSearchParams({ source });
+
+    if (dataset === "custom") {
+        const url = urlInput.value.trim();
+        if (!url) {
+            statusEl.textContent = "Please provide a CSV URL.";
+            return;
+        }
+        params.set("url", url);
+    } else {
+        params.set("dataset", dataset); // e.g., "nyc_taxi_sample"
+    }
+
     try {
         const polarsResp = await fetch(`${FASTAPI_URL}/etl/polars`);
         if (!polarsResp.ok) throw new Error(`Polars failed: ${polarsResp.status}`);
