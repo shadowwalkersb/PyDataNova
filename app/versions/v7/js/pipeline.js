@@ -46,7 +46,7 @@ async function runPipeline() {
         url = DATASETS[source][datasetSelect.value];
     }
 
-    const params = new URLSearchParams({ source, url });
+    const params = new URLSearchParams({ source, url, file_type: source });
 
     try {
         const resp = await fetch(`${FASTAPI_URL}/etl/run?${params.toString()}`);
@@ -120,6 +120,11 @@ const DATASETS = {
     sample_api: "https://jsonplaceholder.typicode.com/todos",
     spacex_launches: "https://api.spacexdata.com/v4/launches/latest",
     iss_now: "http://api.open-notify.org/iss-now.json"
+  },
+  parquet: {
+    nyc_taxi_yellow_jan_2023: "https://www.nyc.gov/assets/tlc/downloads/pdf/data_reports/2023_01_yellow_tripdata.parquet",
+    nyc_taxi_green_jan_2023: "https://www.nyc.gov/assets/tlc/downloads/pdf/data_reports/2023_01_green_tripdata.parquet",
+    nyc_taxi_for_hire_jan_2023: "https://www.nyc.gov/assets/tlc/downloads/pdf/data_reports/2023_01_for_hire_tripdata.parquet"
   }
 };
 
