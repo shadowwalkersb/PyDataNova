@@ -8,4 +8,5 @@ pandas
 asyncpg>=0.27
 pydantic
 polars
+# pyspark
 prefect
