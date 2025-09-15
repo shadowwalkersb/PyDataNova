@@ -105,46 +105,10 @@ const pysparkPane = document.getElementById("pyspark-pane");
 const pysparkHeader = document.getElementById("pyspark-header");
 const pysparkPre = document.getElementById("pyspark-output");
 
-const DATASETS = {
-  csv: {
-    airtravel_csv: "https://people.sc.fsu.edu/~jburkardt/data/csv/airtravel.csv",
-    nyc_taxi_sample: "https://people.sc.fsu.edu/~jburkardt/data/csv/airtravel.csv", // placeholder
-    covid_csv: "https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv"
-  },
-  json: {
-    sample_json: "https://jsonplaceholder.typicode.com/posts",
-    openweather_sample: "https://api.open-meteo.com/v1/forecast?latitude=35&longitude=139&hourly=temperature_2m",
-    github_events: "https://api.github.com/events"
-  },
-  api: {
-    sample_api: "https://jsonplaceholder.typicode.com/todos",
-    spacex_launches: "https://api.spacexdata.com/v4/launches/latest",
-    iss_now: "http://api.open-notify.org/iss-now.json"
-  },
-  parquet: {
-    nyc_taxi_yellow_jan_2023: "https://www.nyc.gov/assets/tlc/downloads/pdf/data_reports/2023_01_yellow_tripdata.parquet",
-    nyc_taxi_green_jan_2023: "https://www.nyc.gov/assets/tlc/downloads/pdf/data_reports/2023_01_green_tripdata.parquet",
-    nyc_taxi_for_hire_jan_2023: "https://www.nyc.gov/assets/tlc/downloads/pdf/data_reports/2023_01_for_hire_tripdata.parquet"
-  }
+const MULTI_SOURCES = {
+  taxi_csv: ["https://raw.githubusercontent.com/ageron/handson-ml2/master/datasets/iris/iris.csv", "csv"],
+  users_json: ["https://raw.githubusercontent.com/veekun/titanic-parquet/main/titanic.json", "json"]
 };
-
-// Initialize datasets on load
-function populateDatasets() {
-  const src = sourceSelect.value;
-  datasetSelect.innerHTML = "";
-  for (const [key, _url] of Object.entries(DATASETS[src])) {
-    datasetSelect.innerHTML += `<option value="${key}">${key}</option>`;
-  }
-  datasetSelect.innerHTML += `<option value="custom">Custom URL</option>`;
-}
-
-populateDatasets();
-
-// Change datasets when source changes
-sourceSelect.addEventListener("change", () => {
-  populateDatasets();
-  urlInput.classList.add("hidden");
-});
 
 datasetSelect.addEventListener("change", () => {
   if (datasetSelect.value === "custom") {
@@ -153,17 +117,23 @@ datasetSelect.addEventListener("change", () => {
   } else {
     urlInput.classList.add("hidden");
   }
-});
+  statusEl.textContent = "Status: Running multiple pipelines…";
+  polarsPre.textContent = "Loading…";
+  pysparkPre.textContent = "Inactive";
 
-// PySpark toggle
-pysparkHeader.addEventListener("click", () => {
-  if (pysparkPane.classList.contains("collapsed")) {
-    pysparkPane.classList.remove("collapsed");
-    pysparkPane.classList.add("expanded");
-    pysparkHeader.innerHTML = "PySpark ETL &#9660;";
-  } else {
-    pysparkPane.classList.remove("expanded");
-    pysparkPane.classList.add("collapsed");
-    pysparkHeader.innerHTML = "PySpark ETL &#9654;";
+  try {
+    const resp = await fetch(`${API_BASE}/etl/polars/multi`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(MULTI_SOURCES)
+    });
+    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+    const data = await resp.json();
+    polarsPre.textContent = JSON.stringify(data.results, null, 2);
+    statusEl.textContent = "Status: All pipelines completed.";
+  } catch (err) {
+    console.error(err);
+    polarsPre.textContent = String(err);
+    statusEl.textContent = "Status: Error running pipelines.";
   }
 });
