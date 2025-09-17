@@ -1,23 +1,15 @@
-from prefect import flow, task
 import polars as pl
+import io
+import requests
 
-@task
-def extract():
-    return pl.DataFrame({
-        "id": [1, 2, 3],
-        "value": ["A", "B", "C"]
-    })
+def pipeline(file_url):
+    resp = requests.get(file_url)
+    resp.raise_for_status()
+    buffer = io.BytesIO(resp.content)
 
-@task
-def transform(df: pl.DataFrame):
-    return df.with_columns((pl.col("id") * 10).alias("id_x10"))
+    df = pl.read_csv(buffer)
 
-@task
-def load(df: pl.DataFrame):
-    return df.to_dicts()
+    preview = df.head(5).to_dicts()
+    summary = {"rows": df.height, "columns": df.columns}
 
-@flow(name="Polars ETL")
-def etl():
-    raw = extract()
-    transformed = transform(raw)
-    return load(transformed)
+    return {"preview": preview, "summary": summary, "columns": df.columns}

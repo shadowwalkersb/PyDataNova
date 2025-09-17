@@ -1,11 +1,15 @@
-from fastapi import APIRouter
-from core.prefect.polars import etl as polars_etl
+from fastapi import APIRouter, Query
+from typing import Optional
+from fastapi.responses import JSONResponse
+from core.prefect.polars import pipeline
 
 router = APIRouter()
 
 @router.get("/polars")
-async def polars():
-    return {"result": polars_etl()}
+async def polars(url=None):
+        url = "https://people.sc.fsu.edu/~jburkardt/data/csv/airtravel.csv";
+        result = pipeline(url)
+        return {"result": result}
 
 @router.get("/pyspark")
 async def pyspark():
