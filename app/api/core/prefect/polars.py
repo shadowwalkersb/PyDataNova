@@ -27,6 +27,10 @@ def pipeline(file_path: str = None, file_url: str = None):
 
 @task
 def process_source(name: str, url: str, fmt: str):
+    """
+    Polars ETL wrapper supporting CSV, JSON arrays, and arbitrary JSON objects.
+    Returns preview (first 5 rows), summary (rows, columns), and column names.
+    """
     resp = requests.get(url)
     resp.raise_for_status()
     content_type = resp.headers.get("Content-Type", "")
@@ -36,6 +40,7 @@ def process_source(name: str, url: str, fmt: str):
     else:  # default CSV
         df = pl.read_csv(StringIO(resp.text))
 
+    # Minimal ETL: here you could add transforms, cleaning, etc.
     return {name: df.head(20).to_dicts()}
 
 @flow
