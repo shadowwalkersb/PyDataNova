@@ -1,11 +1,11 @@
 from fastapi import APIRouter
+from core.prefect.polars import etl as polars_etl
 
 router = APIRouter()
 
 @router.get("/polars")
 async def polars():
-    # placeholder result, will hook Prefect later
-    return {"result": [{"col1": 1, "col2": "A"}, {"col1": 2, "col2": "B"}]}
+    return {"result": polars_etl()}
 
 @router.get("/pyspark")
 async def pyspark():
