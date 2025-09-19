@@ -2,6 +2,7 @@ from fastapi import APIRouter, Query
 from typing import Optional
 from fastapi.responses import JSONResponse
 from core.prefect.polars import pipeline, polars_parallel
+from core.pipelines.etl import etl_flow
 
 router = APIRouter()
 # Multi-source parallel endpoint
@@ -16,26 +17,10 @@ async def polars_multi(sources: dict):
     except Exception as e:
         return JSONResponse({"error": str(e)}, status_code=500)
 
-@router.get("/polars")
-async def polars(
-    source: str = Query(..., description="Data source type, e.g., csv"),
-    dataset: Optional[str] = Query(None, description="Predefined dataset name"),
-    csv_url: Optional[str] = Query(None, description="Custom CSV URL"),
-):
-    if source == "csv":
-        if dataset == "nyc_taxi_sample":
-            # local or bundled file
-            file_path = "data/nyc_taxi_sample.csv"
-            result = pipeline(file_path=file_path)
-        elif dataset == "custom" and csv_url:
-            # fetch directly from provided URL
-            result = pipeline(file_url=csv_url)
-        else:
-            return JSONResponse(
-                {"error": "Invalid dataset or missing CSV URL"},
-                status_code=400,
-            )
-        return {"result": result}
+@router.post("/run")
+async def polars():
+    result = etl_flow()
+    return JSONResponse(content={"message": f"Pipeline finished. Rows inserted: {result['rows_inserted']}"})
 
 @router.get("/pyspark")
 async def pyspark():

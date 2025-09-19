@@ -9,6 +9,3 @@ asyncpg>=0.27
 pydantic
 polars
 pyarrow
-# pyspark
-prefect
-strawberry-graphql
