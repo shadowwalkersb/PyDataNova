@@ -14,15 +14,17 @@
       <label for="sourceSelect">Source:</label>
       <select id="sourceSelect">
         <option value="csv" selected>CSV</option>
+        <option value="json">JSON</option>
+        <option value="api">REST API</option>
       </select>
 
       <label for="datasetSelect">Dataset:</label>
       <select id="datasetSelect">
-        <option value="nyc_taxi_sample" selected>Air Travel Sample (public CSV)</option>
+        <option value="airtravel_csv" selected>Air Travel Sample (CSV)</option>
         <option value="custom">Custom URL</option>
       </select>
 
-      <input id="url" class="hidden" type="url" placeholder="https://example.com/data.csv" />
+      <input id="urlInput" type="text" placeholder="Enter dataset URL" class="hidden"/>
       <button id="runPipelineBtn">Run Pipeline</button>
     </div>
 

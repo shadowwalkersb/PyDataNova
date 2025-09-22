@@ -82,7 +82,6 @@ h1, h2 {
 /* Collapsed / shadow effect for PySpark */
 .pane.collapsed {
     flex: 0 0 60px;
-    height: auto;
     overflow: hidden;
     background-color: #eee;
     color: #999;

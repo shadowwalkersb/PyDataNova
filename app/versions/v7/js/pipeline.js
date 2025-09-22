@@ -39,28 +39,32 @@ async function runPipeline() {
     if (datasetSelect.value === "custom") {
         url = urlInput.value.trim();
         if (!url) {
-        statusEl.textContent = "Please provide a CSV URL.";
+        statusEl.textContent = "Please provide a dataset URL.";
         return;
         }
-    } else if (datasetSelect.value === "nyc_taxi_sample") {
-        url = "https://people.sc.fsu.edu/~jburkardt/data/csv/airtravel.csv";
     } else {
-        statusEl.textContent = "Unknown dataset selected.";
-        return;
+        // Predefined datasets
+        if (source === "csv") url = "https://people.sc.fsu.edu/~jburkardt/data/csv/airtravel.csv";
+        else if (source === "json") url = "https://jsonplaceholder.typicode.com/posts";
+        else if (source === "api") url = "https://jsonplaceholder.typicode.com/todos";
     }
-    const params = new URLSearchParams({ source, url: url });
+
+    const params = new URLSearchParams({ source, url });
 
     try {
-        const polarsResp = await fetch(`${FASTAPI_URL}/etl/polars`);
-        if (!polarsResp.ok) throw new Error(`Polars failed: ${polarsResp.status}`);
-        const polarsData = await polarsResp.json();
+        const resp = await fetch(`${FASTAPI_URL}/etl/run?${params.toString()}`);
+        if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+        const data = await resp.json();
+        const result = data.result ?? data;
 
-        const pysparkResp = await fetch(`${FASTAPI_URL}/etl/pyspark`);
-        if (!pysparkResp.ok) throw new Error(`PySpark failed: ${pysparkResp.status}`);
-        const pysparkData = await pysparkResp.json();
-
-        polarsPre.textContent = JSON.stringify(polarsData.result ?? polarsData, null, 2);
-        pysparkPre.textContent = JSON.stringify(pysparkData.result ?? pysparkData, null, 2);
+        if (result.summary) polarsSummary.textContent = `Rows: ${result.summary.rows}`;
+        if (result.preview && result.preview.length > 0) {
+        const columns = result.columns ?? Object.keys(result.preview[0]);
+        polarsThead.innerHTML = "<tr>" + columns.map(c => `<th>${c}</th>`).join("") + "</tr>";
+        polarsTbody.innerHTML = result.preview
+            .map(row => "<tr>" + columns.map(c => `<td>${row[c] ?? ""}</td>`).join("") + "</tr>")
+            .join("");
+        }
 
         const result = polarsData.result;
         polarsSummary.textContent = `Rows: ${result.summary.rows}`;
@@ -102,6 +106,7 @@ datasetSelect.addEventListener("change", () => {
 
 const pysparkPane = document.getElementById("pyspark-pane");
 const pysparkHeader = document.getElementById("pyspark-header");
+const pysparkPre = document.getElementById("pyspark-output");
 
 pysparkHeader.addEventListener("click", () => {
   if (pysparkPane.classList.contains("collapsed")) {
@@ -112,5 +117,34 @@ pysparkHeader.addEventListener("click", () => {
     pysparkPane.classList.remove("expanded");
     pysparkPane.classList.add("collapsed");
     pysparkHeader.innerHTML = "PySpark ETL &#9654;"; // right arrow
+  }
+});
+
+// Change datasets based on source
+sourceSelect.addEventListener("change", () => {
+  datasetSelect.innerHTML = "";
+  urlInput.classList.add("hidden");
+
+  if (sourceSelect.value === "csv") {
+    datasetSelect.innerHTML = `
+      <option value="airtravel_csv" selected>Air Travel Sample (CSV)</option>
+      <option value="custom">Custom URL</option>`;
+  } else if (sourceSelect.value === "json") {
+    datasetSelect.innerHTML = `
+      <option value="sample_json" selected>Sample JSON</option>
+      <option value="custom">Custom URL</option>`;
+  } else if (sourceSelect.value === "api") {
+    datasetSelect.innerHTML = `
+      <option value="sample_api" selected>Sample API</option>
+      <option value="custom">Custom URL</option>`;
+  }
+});
+
+datasetSelect.addEventListener("change", () => {
+  if (datasetSelect.value === "custom") {
+    urlInput.classList.remove("hidden");
+    urlInput.focus();
+  } else {
+    urlInput.classList.add("hidden");
   }
 });
