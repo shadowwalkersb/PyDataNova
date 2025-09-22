@@ -28,8 +28,7 @@ def pipeline(file_path: str = None, file_url: str = None):
 @task
 def process_source(name: str, url: str, fmt: str):
     """
-    Polars ETL wrapper supporting CSV, JSON arrays, and arbitrary JSON objects.
-    Returns preview (first 5 rows), summary (rows, columns), and column names.
+    Fetch CSV or JSON from URL, run Polars ETL, return preview.
     """
     resp = requests.get(url)
     resp.raise_for_status()
@@ -40,11 +39,18 @@ def process_source(name: str, url: str, fmt: str):
     else:  # default CSV
         df = pl.read_csv(StringIO(resp.text))
 
-    # Minimal ETL: here you could add transforms, cleaning, etc.
+    # return first 20 rows as dict
     return {name: df.head(20).to_dicts()}
 
 @flow
 def polars_parallel(sources: dict):
+    """
+    Run multiple Polars ETL tasks in parallel.
+    sources = {
+        "taxi_csv": ["https://example.com/taxi.csv", "csv"],
+        "users_json": ["https://example.com/users.json", "json"]
+    }
+    """
     futures = [process_source.submit(name, url, fmt) for name, (url, fmt) in sources.items()]
     results = {}
     for f in futures:

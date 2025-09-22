@@ -7,6 +7,9 @@ router = APIRouter()
 # Multi-source parallel endpoint
 @router.post("/polars/multi")
 async def polars_multi(sources: dict):
+    """
+    Run multiple Polars ETL tasks in parallel.
+    """
     try:
         results = polars_parallel(sources)
         return {"results": results}
