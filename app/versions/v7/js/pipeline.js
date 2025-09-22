@@ -81,6 +81,9 @@ runBtn.addEventListener("click", runPipeline);
 // Toggle custom URL field
 datasetSelect.addEventListener("change", () => {
   if (datasetSelect.value === "custom") {
+    urlInput.classList.remove("hidden");
     urlInput.focus();
+  } else {
+    urlInput.classList.add("hidden");
   }
 });

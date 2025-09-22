@@ -58,6 +58,10 @@ h1, h2 {
     border-radius: 4px;
 }
 
+.hidden {
+    display: none;
+}
+
 /* Status text */
 #status {
     font-weight: bold;
