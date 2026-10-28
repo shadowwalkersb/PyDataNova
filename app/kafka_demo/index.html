@@ -19,11 +19,15 @@
     .arrow { color: #62d6a6; }
     .status { min-height: 24px; margin-top: 16px; color: #9eb0c7; }
     pre { min-height: 80px; white-space: pre-wrap; overflow-wrap: anywhere; background: #0f1620; border-radius: 10px; padding: 16px; color: #c7f7df; }
+    .topic-info { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin: 18px 0; }
+    .detail { background: #101720; border: 1px solid #29384c; border-radius: 10px; padding: 12px; min-width: 0; }
+    .detail small { display: block; color: #8ea3c0; margin-bottom: 5px; }
+    .detail strong { display: block; overflow-wrap: anywhere; color: #edf2f7; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 13px; }
     .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 18px; }
     .step { border-top: 2px solid #38506c; padding-top: 10px; color: #94a6bd; font-size: 13px; }
     .step.done { border-color: #62d6a6; color: #d9f7e8; }
     a { color: #8fbcff; }
-    @media (max-width: 520px) { .steps { grid-template-columns: 1fr; } }
+    @media (max-width: 520px) { .topic-info, .steps { grid-template-columns: 1fr; } }
   </style>
 </head>
 <body>
@@ -35,8 +39,18 @@
       <div class="flow" aria-label="Event flow">
         <span class="node">You click</span><span class="arrow">→</span>
         <span class="node">Producer</span><span class="arrow">→</span>
-        <span class="node">Kafka topic</span><span class="arrow">→</span>
+        <span class="node">Kafka topic: pydatanova.events</span><span class="arrow">→</span>
         <span class="node">Consumer</span>
+      </div>
+      <div class="topic-info" aria-label="Kafka message details">
+        <div class="detail"><small>Topic</small><strong id="topic">pydatanova.events</strong></div>
+        <div class="detail"><small>Message key</small><strong id="key">Waiting for an event</strong></div>
+        <div class="detail"><small>Partition</small><strong id="partition">—</strong></div>
+        <div class="detail"><small>Offset</small><strong id="offset">—</strong></div>
+      </div>
+      <div class="topic-info">
+        <div class="detail"><small>Consumer group</small><strong id="consumer-group">Created for this browser event</strong></div>
+        <div class="detail"><small>Retention model</small><strong>Stored by Kafka until its retention policy or container removal</strong></div>
       </div>
       <button id="trigger" type="button">⚡ Trigger event</button>
       <div id="status" class="status" role="status">Ready when you are.</div>
@@ -52,6 +66,11 @@
     const button = document.getElementById('trigger');
     const status = document.getElementById('status');
     const output = document.getElementById('event');
+    const topic = document.getElementById('topic');
+    const key = document.getElementById('key');
+    const partition = document.getElementById('partition');
+    const offset = document.getElementById('offset');
+    const consumerGroup = document.getElementById('consumer-group');
     const steps = ['producer-step', 'topic-step', 'consumer-step'].map(id => document.getElementById(id));
     button.addEventListener('click', async () => {
       button.disabled = true;
@@ -63,7 +82,12 @@
         const result = await response.json();
         if (!response.ok) throw new Error(result.detail || 'Kafka demo request failed');
         steps.forEach(step => step.classList.add('done'));
-        status.textContent = `Consumed from ${result.topic} · partition ${result.partition} · offset ${result.offset}`;
+        topic.textContent = result.topic;
+        key.textContent = result.key;
+        partition.textContent = result.partition;
+        offset.textContent = result.offset;
+        consumerGroup.textContent = result.consumer_group;
+        status.textContent = `Consumed ${result.key} from ${result.topic} · partition ${result.partition} · offset ${result.offset}`;
         output.textContent = JSON.stringify(result.event, null, 2);
       } catch (error) {
         status.textContent = `Could not trigger event: ${error.message}. Is Kafka and its demo API running?`;

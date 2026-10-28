@@ -5,6 +5,21 @@ Kafka producer, the `pydatanova.events` topic, and a consumer. The browser page
 is served by PyDataNova's existing web service; a small FastAPI bridge publishes
 and reads the event through Kafka.
 
+## What the demo names explicitly
+
+| Kafka concept | Demo value |
+| --- | --- |
+| Topic | `pydatanova.events` |
+| Message key | The event's `event_id` (used to route related events consistently) |
+| Broker inside Compose | `kafka:9092` |
+| Broker from the Mac | `localhost:9094` |
+| Browser API | `http://localhost:8002` |
+| Consumer group | A fresh `pydatanova-browser-demo-*` group for each event |
+
+The browser first asks the demo API to produce a JSON event and then uses a
+Kafka consumer with `earliest` offset lookup to read it back. The result labels
+the topic, key, partition, and offset so these Kafka concepts are visible.
+
 ## Run with Docker Compose
 
 From the `app/` directory, start just the web page, Kafka, and demo API:
@@ -14,7 +29,14 @@ docker compose -f docker-compose.yml -f kafka_demo/docker-compose.yml up -d --bu
 ```
 
 Open <http://localhost:5500/kafka_demo/> and click **Trigger event**. The page
-shows the event JSON and its Kafka topic, partition, and offset.
+shows the topic, message key, partition, offset, consumer group, and event JSON.
+You can also inspect the demo API and topic list:
+
+```sh
+curl http://localhost:8002/health
+curl http://localhost:8002/openapi.json
+docker compose -f docker-compose.yml -f kafka_demo/docker-compose.yml exec kafka /opt/kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 --list
+```
 
 To stop these demo services without stopping other Compose services:
 

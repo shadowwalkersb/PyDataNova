@@ -21,11 +21,13 @@ def main() -> None:
 
     producer = KafkaProducer(
         bootstrap_servers=BOOTSTRAP_SERVERS,
+        key_serializer=lambda key: key.encode("utf-8"),
         value_serializer=lambda value: json.dumps(value).encode("utf-8"),
     )
     try:
-        metadata = producer.send(TOPIC, event).get(timeout=10)
-        print(f"Produced to {metadata.topic} partition {metadata.partition}: {event}")
+        event_key = event["event_id"]
+        metadata = producer.send(TOPIC, key=event_key, value=event).get(timeout=10)
+        print(f"Produced to topic={metadata.topic} key={event_key} partition={metadata.partition} offset={metadata.offset}: {event}")
     finally:
         producer.close()
 
@@ -43,7 +45,8 @@ def main() -> None:
         deadline = time.monotonic() + 10
         for message in consumer:
             if message.value.get("event_id") == event["event_id"]:
-                print(f"Consumed from {message.topic}: {message.value}")
+                message_key = message.key.decode("utf-8") if message.key else None
+                print(f"Consumed from topic={message.topic} key={message_key} partition={message.partition} offset={message.offset}: {message.value}")
                 return
             if time.monotonic() >= deadline:
                 break

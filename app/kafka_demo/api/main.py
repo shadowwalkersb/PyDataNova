@@ -13,6 +13,7 @@ from kafka.errors import KafkaError
 
 BOOTSTRAP_SERVERS = os.getenv("KAFKA_BOOTSTRAP_SERVERS", "localhost:9092")
 TOPIC = "pydatanova.events"
+CONSUMER_GROUP = "pydatanova-browser-demo"
 
 app = FastAPI(title="PyDataNova Kafka Demo")
 app.add_middleware(
@@ -24,8 +25,13 @@ app.add_middleware(
 
 
 @app.get("/health")
-def health() -> dict[str, str]:
-    return {"status": "ready", "topic": TOPIC}
+def health() -> dict[str, object]:
+    return {
+        "status": "ready",
+        "bootstrap_servers": BOOTSTRAP_SERVERS,
+        "topic": TOPIC,
+        "consumer_group_prefix": CONSUMER_GROUP,
+    }
 
 
 @app.post("/events")
@@ -39,20 +45,23 @@ def trigger_event() -> dict[str, object]:
 
     producer = KafkaProducer(
         bootstrap_servers=BOOTSTRAP_SERVERS,
+        key_serializer=lambda key: key.encode("utf-8"),
         value_serializer=lambda value: json.dumps(value).encode("utf-8"),
         request_timeout_ms=10_000,
     )
     try:
-        metadata = producer.send(TOPIC, event).get(timeout=10)
+        event_key = event["event_id"]
+        metadata = producer.send(TOPIC, key=event_key, value=event).get(timeout=10)
     except KafkaError as exc:
         raise HTTPException(status_code=503, detail=f"Could not publish to Kafka: {exc}") from exc
     finally:
         producer.close()
 
+    consumer_group = f"{CONSUMER_GROUP}-{uuid.uuid4()}"
     consumer = KafkaConsumer(
         TOPIC,
         bootstrap_servers=BOOTSTRAP_SERVERS,
-        group_id=f"pydatanova-browser-demo-{uuid.uuid4()}",
+        group_id=consumer_group,
         auto_offset_reset="earliest",
         enable_auto_commit=False,
         value_deserializer=lambda value: json.loads(value.decode("utf-8")),
@@ -65,6 +74,8 @@ def trigger_event() -> dict[str, object]:
                     "topic": metadata.topic,
                     "partition": metadata.partition,
                     "offset": metadata.offset,
+                    "key": event_key,
+                    "consumer_group": consumer_group,
                     "event": message.value,
                 }
         raise HTTPException(status_code=504, detail="Kafka received the event but the demo consumer timed out")
