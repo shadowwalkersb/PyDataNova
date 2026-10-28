@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PyDataNova · Kafka event demo</title>
+  <style>
+    :root { color-scheme: dark; font-family: Inter, ui-sans-serif, system-ui, sans-serif; background: #10151f; color: #edf2f7; }
+    body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding: 24px; box-sizing: border-box; }
+    main { width: min(680px, 100%); }
+    .eyebrow { color: #8ea3c0; letter-spacing: .12em; text-transform: uppercase; font-size: 12px; font-weight: 700; }
+    h1 { margin: 10px 0; font-size: clamp(30px, 6vw, 46px); }
+    p { color: #b5c1d2; line-height: 1.6; }
+    .card { background: #192231; border: 1px solid #2c3a4e; border-radius: 16px; padding: 24px; margin-top: 24px; }
+    button { background: #62d6a6; border: 0; border-radius: 10px; color: #102219; font-size: 16px; font-weight: 750; padding: 13px 18px; cursor: pointer; }
+    button:disabled { opacity: .6; cursor: wait; }
+    .flow { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin: 22px 0; color: #d4deeb; }
+    .node { background: #243349; border-radius: 8px; padding: 9px 12px; }
+    .arrow { color: #62d6a6; }
+    .status { min-height: 24px; margin-top: 16px; color: #9eb0c7; }
+    pre { min-height: 80px; white-space: pre-wrap; overflow-wrap: anywhere; background: #0f1620; border-radius: 10px; padding: 16px; color: #c7f7df; }
+    .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 18px; }
+    .step { border-top: 2px solid #38506c; padding-top: 10px; color: #94a6bd; font-size: 13px; }
+    .step.done { border-color: #62d6a6; color: #d9f7e8; }
+    a { color: #8fbcff; }
+    @media (max-width: 520px) { .steps { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <main>
+    <div class="eyebrow">PyDataNova · Live demo</div>
+    <h1>Send an event through Kafka</h1>
+    <p>Click the button. PyDataNova publishes an event to a Kafka topic, then a consumer reads it back and shows it here.</p>
+    <section class="card">
+      <div class="flow" aria-label="Event flow">
+        <span class="node">You click</span><span class="arrow">→</span>
+        <span class="node">Producer</span><span class="arrow">→</span>
+        <span class="node">Kafka topic</span><span class="arrow">→</span>
+        <span class="node">Consumer</span>
+      </div>
+      <button id="trigger" type="button">⚡ Trigger event</button>
+      <div id="status" class="status" role="status">Ready when you are.</div>
+      <div class="steps" aria-live="polite">
+        <div class="step" id="producer-step">1 · Event published</div>
+        <div class="step" id="topic-step">2 · Stored in topic</div>
+        <div class="step" id="consumer-step">3 · Read by consumer</div>
+      </div>
+      <pre id="event">Your event will appear here.</pre>
+    </section>
+    <p><a href="/">Back to PyDataNova</a></p>
+  </main>
+  <script>
+    const button = document.getElementById('trigger');
+    const status = document.getElementById('status');
+    const output = document.getElementById('event');
+    const steps = ['producer-step', 'topic-step', 'consumer-step'].map(id => document.getElementById(id));
+    button.addEventListener('click', async () => {
+      button.disabled = true;
+      steps.forEach(step => step.classList.remove('done'));
+      output.textContent = '';
+      status.textContent = 'Sending event to Kafka…';
+      try {
+        const response = await fetch('http://localhost:8002/events', { method: 'POST' });
+        const result = await response.json();
+        if (!response.ok) throw new Error(result.detail || 'Kafka demo request failed');
+        steps.forEach(step => step.classList.add('done'));
+        status.textContent = `Consumed from ${result.topic} · partition ${result.partition} · offset ${result.offset}`;
+        output.textContent = JSON.stringify(result.event, null, 2);
+      } catch (error) {
+        status.textContent = `Could not trigger event: ${error.message}. Is Kafka and its demo API running?`;
+      } finally {
+        button.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>

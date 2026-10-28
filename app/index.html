@@ -10,24 +10,29 @@
 <h1>PyDataNova Portfolio</h1>
 
 <div class="tabs">
-  <button class="tab-btn" onclick="loadVersion('v1')">v1 – Static</button>
-  <button class="tab-btn" onclick="loadVersion('v2')">v2 – CSS/JS</button>
-  <button class="tab-btn" onclick="loadVersion('v3')">v3 – Charts</button>
-  <button class="tab-btn" onclick="loadVersion('v4')">v4 – Backend</button>
-  <button class="tab-btn" onclick="loadVersion('v5')">v5 – Dual Backend</button>
-  <button class="tab-btn" onclick="loadVersion('v6')">v6 – CRUD</button>
-  <button class="tab-btn active" onclick="loadVersion('v7')">v7 – Orchestrated ETL Pipelines</button>
+  <button class="tab-btn" onclick="loadVersion('v1', this)">v1 – Static</button>
+  <button class="tab-btn" onclick="loadVersion('v2', this)">v2 – CSS/JS</button>
+  <button class="tab-btn" onclick="loadVersion('v3', this)">v3 – Charts</button>
+  <button class="tab-btn" onclick="loadVersion('v4', this)">v4 – Backend</button>
+  <button class="tab-btn" onclick="loadVersion('v5', this)">v5 – Dual Backend</button>
+  <button class="tab-btn" onclick="loadVersion('v6', this)">v6 – CRUD</button>
+  <button class="tab-btn active" onclick="loadVersion('v7', this)">v7 – Orchestrated ETL Pipelines</button>
+  <button class="tab-btn" onclick="loadVersion('v8', this)">v8 – Kafka Event Demo</button>
 </div>
 
 <iframe id="viewer" src="versions/v7/index.html"></iframe>
 
 <script>
-  function loadVersion(version) {
-    document.getElementById('viewer').src = `versions/${version}/index.html`;
-    const buttons = document.querySelectorAll('.tab-btn');
-    buttons.forEach(btn => btn.classList.remove('active'));
-    event.target.classList.add('active');
+  function setActiveTab(button) {
+    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+    button.classList.add('active');
   }
+
+  function loadVersion(version, button) {
+    document.getElementById('viewer').src = `versions/${version}/index.html`;
+    setActiveTab(button);
+  }
+
 </script>
 
 </body>

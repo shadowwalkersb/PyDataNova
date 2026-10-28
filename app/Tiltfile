@@ -1,4 +1,5 @@
-docker_compose('docker-compose.yml')
+# Load the app stack and the optional local Kafka broker together.
+docker_compose(['docker-compose.yml', 'kafka_demo/docker-compose.yml'])
 
 local_resource(
     'web-restart',
