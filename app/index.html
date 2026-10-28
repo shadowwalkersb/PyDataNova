@@ -20,7 +20,7 @@
   <button class="tab-btn" onclick="loadVersion('v8', this)">v8 – Kafka Event Demo</button>
 </div>
 
-<iframe id="viewer" src="/versions/v7/index.html"></iframe>
+<iframe id="viewer" src="/versions/v7/index.html?build=1"></iframe>
 
 <script>
   function setActiveTab(button) {
@@ -29,7 +29,7 @@
   }
 
   function loadVersion(version, button) {
-    document.getElementById('viewer').src = `/versions/${version}/index.html`;
+    document.getElementById('viewer').src = `/versions/${version}/index.html?build=1`;
     setActiveTab(button);
   }
 
